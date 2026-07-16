@@ -209,6 +209,7 @@
       "space p R": "pane::DeploySearch",
       "space p c": "task::Spawn",
       "space p a": "workspace::AddFolderToProject",
+      "space p y": "workspace::CopyRelativePath",
       "space p r": "projects::OpenRemote",
 
       // ===== +Quit (SPC q) =====
