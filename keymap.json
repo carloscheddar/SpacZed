@@ -146,6 +146,12 @@
       "space f y P": "editor::OpenPermalinkToLine",
 
       // ===== +Git (SPC g) =====
+      // Magit-like status via gitu (see tasks.json); native panel stays on g s
+      // which-key shows "Spawn" for all task::Spawn bindings (Zed limitation).
+      "space g g": [
+        "task::Spawn",
+        { "task_name": "gitu", "reveal_target": "center" }
+      ],
       "space g s": "git_panel::ToggleFocus",
       "space g b": "git::Blame",
       "space g B": "branches::OpenRecent",
