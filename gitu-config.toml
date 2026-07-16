@@ -1,0 +1,7 @@
+# Magit-friendly overrides for gitu.
+# Install: cp gitu-config.toml ~/.config/gitu/config.toml
+#
+# Defaults: discard is `K`, reset menu is `X`. Magit uses `x` for discard.
+
+[bindings]
+root.discard = ["x", "K"]

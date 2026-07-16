@@ -43,6 +43,10 @@ brew install gitu
 cp keymap.json ~/.config/zed/keymap.json
 cp tasks.json ~/.config/zed/tasks.json
 
+# Magit-friendly gitu keys (discard on `x`; see gitu-config.toml)
+mkdir -p ~/.config/gitu
+cp gitu-config.toml ~/.config/gitu/config.toml
+
 # Merge settings: at minimum enable vim_mode + which_key (see settings.json)
 ```
 
@@ -157,13 +161,17 @@ Do **not** replace a personalized `settings.json` wholesale unless you intend to
 
 Opens [gitu](https://github.com/altsem/gitu) in the center pane (see [`tasks.json`](tasks.json)).
 
+Install Magit-friendly overrides from [`gitu-config.toml`](gitu-config.toml) to `~/.config/gitu/config.toml` (maps discard to Magit `x`; default gitu uses `K` only).
+
 > which-key shows `Spawn` for `task::Spawn` bindings ([zed#46348](https://github.com/zed-industries/zed/issues/46348)); custom labels are not supported yet.
 
 Magit-like keys inside gitu:
 
 | Key | Action |
 |-----|--------|
-| `s` / `u` | Stage / unstage (file or hunk) |
+| `s` / `u` | Stage / unstage (file, hunk, or line) |
+| `ctrl-j` / `ctrl-k` | Move by line within a hunk (`j`/`k` move by hunk) |
+| `x` / `K` | Discard (requires [`gitu-config.toml`](gitu-config.toml) for `x`) |
 | `c c` | Commit |
 | `c a` | Amend |
 | `P` / `F` | Push / pull menus |
@@ -223,6 +231,7 @@ If you maintain bindings in `~/.config/zed/` and want to refresh this repo:
 ```bash
 cp ~/.config/zed/keymap.json ./keymap.json
 cp ~/.config/zed/tasks.json ./tasks.json
+cp ~/.config/gitu/config.toml ./gitu-config.toml   # if you customize gitu
 # Re-check settings.json stays minimal (no personal agent/theme keys)
 # Keep README.md in sync when adding/removing chords
 ```
