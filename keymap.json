@@ -1,0 +1,468 @@
+// Spacemacs / VSpaceCode-style keymap for Zed
+//
+// Inspired by https://github.com/wangfenjin/zed and VSpaceCode menus.
+// Space is the leader in vim normal/visual; enable which_key in settings.json.
+//
+// Important: single-key prefixes like `space f` are null in the editor context so
+// they stay pure prefixes (otherwise Zed times out ~1s and opens file finder).
+// Do not use `!menu` on the main Spacemacs context — which-key can hide chords.
+[
+  {
+    // Avoid "!menu" here: when which-key (or another modal) is open, `menu` can
+    // appear in the context stack and hide every Spacemacs binding, leaving only
+    // leftovers like EmptyPane's `space f e *` — so which-key shows just "e".
+    "context": "Editor && VimControl && !VimWaiting",
+    "bindings": {
+      // Leader: null so Space does not insert/move; longer `space …` chords remain.
+      "space": null,
+      // Null single-key Space prefixes so they are NOT complete bindings.
+      // Otherwise Zed waits ~1s then runs the short action (e.g. file finder on `SPC f`).
+      // Same context as `space f f` / `space f s` → pure prefix, no timeout.
+      "space f": null,
+      "space b": null,
+      "space s": null,
+      "space d": null,
+      "space r": null,
+      "space a": null,
+      "space c": null,
+      "space p": null,
+      "space y": null,
+      "space h": null,
+      "space k": null,
+      "space w d": null,
+      "space w q": null,
+
+      // ===== Root =====
+      "space space": "command_palette::Toggle",
+      "space /": "pane::DeploySearch",
+      "space *": ["workspace::SendKeystrokes", "* /"],
+      "space '": "terminal_panel::ToggleFocus",
+      "space !": "terminal_panel::ToggleFocus",
+      "space tab": "pane::AlternateFile",
+      "space ;": "editor::ToggleComments",
+      "space 0": "project_panel::ToggleFocus",
+      "space 1": ["workspace::ActivatePane", 0],
+      "space 2": ["workspace::ActivatePane", 1],
+      "space 3": ["workspace::ActivatePane", 2],
+      "space 4": ["workspace::ActivatePane", 3],
+      "space 5": ["workspace::ActivatePane", 4],
+      "space 6": ["workspace::ActivatePane", 5],
+      "space 7": ["workspace::ActivatePane", 6],
+      "space 8": ["workspace::ActivatePane", 7],
+      "space 9": ["workspace::ActivatePane", 8],
+      "space ?": "zed::OpenKeymap",
+      "space v": "editor::SelectLargerSyntaxNode",
+
+      // ===== +Tasks (SPC :) =====
+      "space : :": "task::Spawn",
+      "space : .": "task::Rerun",
+      "space : r": "task::Rerun",
+
+      // ===== +Buffers (SPC b) =====
+      "space b b": "tab_switcher::ToggleAll",
+      "space b B": "tab_switcher::Toggle",
+      "space b d": "pane::CloseActiveItem",
+      "space b s": "workspace::NewFile",
+      "space b n": "pane::ActivateNextItem",
+      "space b p": "pane::ActivatePreviousItem",
+      "space b u": "pane::ReopenClosedItem",
+      "space b M": "pane::CloseOtherItems",
+      "space b t": "pane::TogglePinTab",
+      "space b h": "pane::SplitAndMoveLeft",
+      "space b l": "pane::SplitAndMoveRight",
+      "space b j": "pane::SplitAndMoveDown",
+      "space b k": "pane::SplitAndMoveUp",
+      "space b H": "pane::SplitAndMoveLeft",
+      "space b L": "pane::SplitAndMoveRight",
+      "space b J": "pane::SplitAndMoveDown",
+      "space b K": "pane::SplitAndMoveUp",
+      "space b N n": "workspace::NewFile",
+      "space b N h": "workspace::NewFileSplitHorizontal",
+      "space b 1": ["pane::ActivateItem", 0],
+      "space b 2": ["pane::ActivateItem", 1],
+      "space b 3": ["pane::ActivateItem", 2],
+      "space b 4": ["pane::ActivateItem", 3],
+      "space b 5": ["pane::ActivateItem", 4],
+      "space b 6": ["pane::ActivateItem", 5],
+      "space b 7": ["pane::ActivateItem", 6],
+      "space b 8": ["pane::ActivateItem", 7],
+      "space b 9": ["pane::ActivateItem", 8],
+      "space b 0": "pane::ActivateLastItem",
+
+      // ===== +Compile/Comments (SPC c) =====
+      "space c l": "editor::ToggleComments",
+      "space c L": "editor::ToggleBlockComments",
+      "space c c": "task::Spawn",
+      "space c n": "editor::GoToDiagnostic",
+      "space c N": "editor::GoToPreviousDiagnostic",
+      "space c r": "editor::Rename",
+      "space c a": "editor::ToggleCodeActions",
+      "space c f": "editor::Format",
+      "space c i": "editor::OrganizeImports",
+
+      // ===== +Debug (SPC d) =====
+      "space d d": "debugger::Start",
+      "space d c": "debugger::Continue",
+      "space d s": "debugger::StepOver",
+      "space d i": "debugger::StepInto",
+      "space d o": "debugger::StepOut",
+      "space d p": "debugger::Pause",
+      "space d r": "debugger::Restart",
+      "space d R": "debugger::Rerun",
+      "space d S": "debugger::Stop",
+      "space d t": "debug_panel::ToggleFocus",
+      "space d b b": "editor::ToggleBreakpoint",
+      "space d b d": "debugger::UnsetBreakpoint",
+      "space d b e": "debugger::ToggleEnableBreakpoint",
+      "space d b l": "editor::EditLogBreakpoint",
+
+      // ===== +Errors (SPC e) =====
+      "space e l": "diagnostics::Deploy",
+      "space e e": "diagnostics::Deploy",
+      "space e n": "editor::GoToDiagnostic",
+      "space e p": "editor::GoToPreviousDiagnostic",
+      "space e N": "editor::GoToPreviousDiagnostic",
+
+      // ===== +File (SPC f) =====
+      "space f f": "file_finder::Toggle",
+      "space f s": "workspace::Save",
+      "space f S": "workspace::SaveWithoutFormat",
+      "space f a": "workspace::SaveAll",
+      "space f w": "workspace::SaveAs",
+      "space f r": "pane::ReopenClosedItem",
+      "space f o": "workspace::Open",
+      "space f t": "pane::RevealInProjectPanel",
+      "space f D": "editor::RevealInFileManager",
+      "space f e d": "zed::OpenKeymapFile",
+      "space f e D": "zed::OpenKeymap",
+      "space f e s": "zed::OpenSettingsFile",
+      "space f e S": "zed::OpenSettings",
+      "space f y y": "workspace::CopyPath",
+      "space f y Y": "workspace::CopyRelativePath",
+      "space f y n": "editor::CopyFileName",
+      "space f y N": "editor::CopyFileNameWithoutExtension",
+      "space f y l": "editor::CopyFileLocation",
+      "space f y p": "editor::CopyPermalinkToLine",
+      "space f y P": "editor::OpenPermalinkToLine",
+
+      // ===== +Git (SPC g) =====
+      "space g s": "git_panel::ToggleFocus",
+      "space g b": "git::Blame",
+      "space g B": "branches::OpenRecent",
+      "space g c": "git::Clone",
+      "space g i": "git::Init",
+      "space g d": "git::Diff",
+      "space g D": "git::ReviewDiff",
+      "space g m": "git::OpenModifiedFiles",
+      "space g S": "git::StageFile",
+      "space g U": "git::UnstageFile",
+      "space g r": "git::RestoreFile",
+      "space g l l": "editor::OpenPermalinkToLine",
+      "space g l p": "editor::CopyPermalinkToLine",
+      "space g f d": "git::Diff",
+      "space g f l": "git::FileHistory",
+      "space g P": "git::Push",
+      "space g F": "git::Pull",
+      "space g f f": "git::Fetch",
+      "space g w": "git::Worktree",
+      "space g h d": "editor::ToggleSelectedDiffHunks",
+      "space g h n": "editor::GoToHunk",
+      "space g h p": "editor::GoToPreviousHunk",
+
+      // ===== +Help (SPC h) =====
+      "space h k": "zed::OpenKeymap",
+      "space h K": "zed::OpenKeymapFile",
+      "space h d": "zed::OpenSettings",
+      "space h e": "zed::Extensions",
+
+      // ===== +Insert (SPC i) =====
+      "space i j": "editor::NewlineBelow",
+      "space i k": "editor::NewlineAbove",
+      "space i s": "assistant::InlineAssist",
+
+      // ===== +Jump (SPC j) =====
+      "space j i": "outline::Toggle",
+      "space j I": "project_symbols::Toggle",
+      "space j =": "editor::Format",
+      "space j +": "editor::Format",
+      "space j c": "editor::GoToPreviousChange",
+      "space j C": "editor::GoToNextChange",
+      "space j d": "editor::GoToDefinition",
+      "space j D": "editor::GoToDefinitionSplit",
+      "space j r": "editor::FindAllReferences",
+      "space j t": "editor::GoToTypeDefinition",
+      "space j m": "editor::GoToImplementation",
+
+      // ===== +Project (SPC p) =====
+      "space p f": "file_finder::Toggle",
+      "space p p": "projects::OpenRecent",
+      "space p l": "projects::OpenRecent",
+      "space p t": "project_panel::ToggleFocus",
+      "space p T": "project_panel::ToggleFocus",
+      "space p /": "pane::DeploySearch",
+      "space p R": "pane::DeploySearch",
+      "space p c": "task::Spawn",
+      "space p a": "workspace::AddFolderToProject",
+      "space p r": "projects::OpenRemote",
+
+      // ===== +Quit (SPC q) =====
+      "space q q": "workspace::CloseWindow",
+      "space q f": "workspace::CloseWindow",
+      "space q Q": "zed::Quit",
+      "space q s": "workspace::SaveAll",
+
+      // ===== +Resume (SPC r) =====
+      "space r b": "tab_switcher::ToggleAll",
+      "space r s": "pane::DeploySearch",
+      "space r p": "projects::OpenRecent",
+      "space r r": "task::Rerun",
+
+      // ===== +Search/Symbol (SPC s) =====
+      "space s p": "pane::DeploySearch",
+      "space s P": "pane::DeploySearch",
+      "space s s": "outline::Toggle",
+      "space s S": "project_symbols::Toggle",
+      "space s j": "outline::Toggle",
+      "space s J": "project_symbols::Toggle",
+      "space s e": "editor::Rename",
+      "space s r": "editor::FindAllReferences",
+      "space s a": "editor::SelectAllMatches",
+      "space s f": "buffer_search::Deploy",
+      "space s g": "project_symbols::Toggle",
+      "space s c": "vim::ClearOperators",
+      "space s h": "editor::SelectAllMatches",
+
+      // ===== +Toggles (SPC t) =====
+      "space t l": "editor::ToggleSoftWrap",
+      "space t i": "editor::ToggleInlayHints",
+      "space t n": "editor::ToggleLineNumbers",
+      "space t c": "search::ToggleCaseSensitive",
+      "space t w": "search::ToggleWholeWord",
+      "space t r": "search::ToggleRegex",
+      "space t e": "editor::ToggleEditPrediction",
+      "space t z": "workspace::ToggleZoom",
+      "space t t": "theme::ToggleMode",
+      "space t b": "editor::ToggleBreakpoint",
+
+      // ===== +Window (SPC w) =====
+      "space w /": "pane::SplitRight",
+      "space w v": "pane::SplitRight",
+      "space w -": "pane::SplitDown",
+      "space w s": "pane::SplitDown",
+      "space w h": "workspace::ActivatePaneLeft",
+      "space w j": "workspace::ActivatePaneDown",
+      "space w k": "workspace::ActivatePaneUp",
+      "space w l": "workspace::ActivatePaneRight",
+      "space w w": "workspace::ActivateNextPane",
+      "space w W": "workspace::ActivatePreviousPane",
+      "space w d": "pane::CloseActiveItem",
+      "space w D": "workspace::CloseInactiveTabsAndPanes",
+      "space w m": "workspace::CloseAllDocks",
+      "space w M": "workspace::ToggleZoom",
+      "space w =": "vim::ResetPaneSizes",
+      "space w [": "vim::ResizePaneLeft",
+      "space w ]": "vim::ResizePaneRight",
+      "space w +": "vim::ResizePaneUp",
+      "space w _": "vim::ResizePaneDown",
+      "space w o": "workspace::NewWindow",
+      "space w F": "workspace::NewWindow",
+      "space w x": "workspace::CloseAllItemsAndPanes",
+      "space w z": "pane::JoinAll",
+      "space w H": "workspace::MovePaneLeft",
+      "space w L": "workspace::MovePaneRight",
+      "space w J": "workspace::MovePaneDown",
+      "space w K": "workspace::MovePaneUp",
+      "space w 1": ["workspace::ActivatePane", 0],
+      "space w 2": ["workspace::ActivatePane", 1],
+      "space w 3": ["workspace::ActivatePane", 2],
+      "space w 4": ["workspace::ActivatePane", 3],
+
+      // ===== +Text (SPC x) =====
+      "space x j": "editor::JoinLines",
+      "space x u": "vim::ConvertToLowerCase",
+      "space x U": "vim::ConvertToUpperCase",
+      "space x ~": "vim::ChangeCase",
+      "space x d w": "editor::DeleteToNextWordEnd",
+      "space x d d": "editor::DeleteLine",
+      "space x s": "editor::SortLinesCaseSensitive",
+
+      // ===== +Zoom/Fold (SPC z) =====
+      "space z z": "workspace::ToggleZoom",
+      "space z m": "editor::FoldAll",
+      "space z r": "editor::UnfoldAll",
+      "space z a": "editor::ToggleFold",
+      "space z c": "editor::Fold",
+      "space z o": "editor::UnfoldLines",
+      "space z O": "editor::UnfoldRecursive",
+      "space z C": "editor::FoldRecursive",
+      "space z +": "zed::IncreaseBufferFontSize",
+      "space z -": "zed::DecreaseBufferFontSize",
+      "space z 0": "zed::ResetBufferFontSize",
+
+      // ===== +Diff (SPC D) =====
+      "space shift-d d": "git::Diff",
+      "space shift-d r": "git::ReviewDiff",
+      "space shift-d h": "editor::ToggleSelectedDiffHunks",
+      "space shift-d e": "editor::ExpandAllDiffHunks",
+
+      // ===== +Frame (SPC F) =====
+      "space shift-f f": "zed::ToggleFullScreen",
+      "space shift-f n": "workspace::NewWindow",
+      "space shift-f d": "workspace::CloseWindow",
+
+      // ===== +Show / UI (SPC S / SPC T) =====
+      "space shift-s p": "project_panel::ToggleFocus",
+      "space shift-s g": "git_panel::ToggleFocus",
+      "space shift-s t": "terminal_panel::ToggleFocus",
+      "space shift-s a": "agent::ToggleFocus",
+      "space shift-s d": "debug_panel::ToggleFocus",
+      "space shift-s o": "outline_panel::ToggleFocus",
+      "space shift-s e": "diagnostics::Deploy",
+      "space shift-t l": "workspace::ToggleLeftDock",
+      "space shift-t r": "workspace::ToggleRightDock",
+      "space shift-t b": "workspace::ToggleBottomDock",
+      "space shift-t a": "workspace::ToggleAllDocks",
+      "space shift-t z": "workspace::ToggleZoom",
+
+      // ===== +Agent (SPC a) =====
+      "space a a": "agent::ToggleFocus",
+      "space a i": "agent::ToggleFocus",
+      "space a n": "agent::NewThread",
+      "space a s": "agent::OpenSettings",
+      "space a d": "agent::OpenAgentDiff",
+
+      // ===== Misc =====
+      "ctrl-w ctrl-w": "agent::ToggleFocus"
+    }
+  },
+  {
+    // Default vim.json binds `space f` → file_finder under `!Editor && !Terminal`.
+    // That predicate can match the Pane node even with an Editor focused, which makes
+    // `SPC f` a complete chord that fires after ~1s. Null it here at the source.
+    "context": "!Editor && !Terminal",
+    "bindings": {
+      "space f": null,
+      "space b": null,
+      "space s": null,
+      "space d": null,
+      "space r": null,
+      "space a": null,
+      "space c": null,
+      "space p": null,
+      "space y": null,
+      "space h": null,
+      "space k": null
+    }
+  },
+  {
+    "context": "EmptyPane || Welcome",
+    "bindings": {
+      "space space": "command_palette::Toggle",
+      "space p p": "projects::OpenRecent",
+      "space p f": "file_finder::Toggle",
+      "space p t": "project_panel::ToggleFocus",
+      "space /": "pane::DeploySearch",
+      "space '": "terminal_panel::ToggleFocus",
+      "space f f": "file_finder::Toggle",
+      "space f s": "workspace::Save",
+      "space f e d": "zed::OpenKeymapFile",
+      "space f e s": "zed::OpenSettingsFile",
+      "space q q": "workspace::CloseWindow",
+      "space q Q": "zed::Quit"
+    }
+  },
+  {
+    // Kill Helix/default single-key space chords only in helix modes so they
+    // cannot shadow Spacemacs `space f f` / `space b b` / etc.
+    "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
+    "bindings": {
+      "space f": null,
+      "space b": null,
+      "space s": null,
+      "space d": null,
+      "space r": null,
+      "space a": null,
+      "space c": null,
+      "space p": null,
+      "space y": null,
+      "space h": null,
+      "space k": null
+    }
+  },
+  {
+    "context": "ProjectSearchBar > Editor",
+    "bindings": {
+      "escape": "pane::CloseActiveItem"
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "ctrl-g": "workspace::ToggleBottomDock",
+      "ctrl-shift-space": "command_palette::Toggle"
+    }
+  },
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "q": "workspace::ToggleLeftDock",
+      "space p t": "workspace::ToggleLeftDock",
+      "o": "project_panel::Open",
+      "a": "project_panel::NewFile",
+      "A": "project_panel::NewDirectory",
+      "r": "project_panel::Rename",
+      "d": "project_panel::Delete",
+      "x": "project_panel::Cut",
+      "y": "project_panel::Copy",
+      "p": "project_panel::Paste",
+      "c": "project_panel::CollapseAllEntries"
+    }
+  },
+  {
+    // Magit-inspired Git panel (from wangfenjin/zed)
+    "context": "GitPanel",
+    "bindings": {
+      "tab": "git::Diff",
+      "c c": "git::Commit",
+      "c a": "git::Amend",
+      "b b": "branches::OpenRecent",
+      "P u": "git::Push",
+      "P f": "git::ForcePush",
+      "F u": "git::Pull",
+      "F r": "git::PullRebase",
+      "f f": "git::Fetch",
+      "s": "git::ToggleStaged",
+      "S": "git::StageAll",
+      "u": "git::UnstageFile",
+      "U": "git::UnstageAll",
+      "x": ["git::RestoreFile", { "skip_prompt": false }],
+      "X": ["git::RestoreFile", { "skip_prompt": true }],
+      "escape": "workspace::ToggleRightDock",
+      "q": "workspace::ToggleRightDock"
+    }
+  },
+  {
+    "context": "GitDiff > multibuffer || Editor && multibuffer",
+    "bindings": {
+      "escape": "pane::CloseActiveItem",
+      "c c": "git::Commit",
+      "s": "git::ToggleStaged",
+      "S": "git::StageAll",
+      "n": "search::SelectNextMatch",
+      "shift-n": "search::SelectPreviousMatch"
+    }
+  },
+  {
+    "context": "AgentPanel",
+    "bindings": {
+      "escape": "workspace::ToggleRightDock",
+      "ctrl-g": "workspace::ToggleRightDock"
+    }
+  },
+  {
+    "use_key_equivalents": true,
+    "bindings": {
+      "cmd-shift-c": null
+    }
+  }
+]
