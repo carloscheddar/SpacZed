@@ -6,18 +6,17 @@
 // Important: single-key prefixes like `space f` are null in the editor context so
 // they stay pure prefixes (otherwise Zed times out ~1s and opens file finder).
 // Do not use `!menu` on the main Spacemacs context — which-key can hide chords.
+//
+// Non-editor panes (Terminal/gitu, EmptyPane, Project/Git/Debug/Outline/MarkdownPreview
+// panels) get the workspace-safe Space subset so SPC t z / SPC w / SPC g / etc. still work.
+// AgentPanel is excluded so Space types normally in the thread message editor.
+// Editor Spacemacs leader is normal/visual only — not insert (so Space inserts).
+
 [
   {
-    // Avoid "!menu" here: when which-key (or another modal) is open, `menu` can
-    // appear in the context stack and hide every Spacemacs binding, leaving only
-    // leftovers like EmptyPane's `space f e *` — so which-key shows just "e".
-    "context": "Editor && VimControl && !VimWaiting",
+    "context": "Editor && VimControl && !VimWaiting && (vim_mode == normal || vim_mode == visual)",
     "bindings": {
-      // Leader: null so Space does not insert/move; longer `space …` chords remain.
       "space": null,
-      // Null single-key Space prefixes so they are NOT complete bindings.
-      // Otherwise Zed waits ~1s then runs the short action (e.g. file finder on `SPC f`).
-      // Same context as `space f f` / `space f s` → pure prefix, no timeout.
       "space f": null,
       "space b": null,
       "space s": null,
@@ -29,40 +28,67 @@
       "space y": null,
       "space h": null,
       "space k": null,
-      "space w d": null,
+      "space w d": "pane::CloseActiveItem",
       "space w q": null,
-
-      // ===== Root =====
       "space space": "command_palette::Toggle",
       "space /": "pane::DeploySearch",
-      "space *": ["workspace::SendKeystrokes", "* /"],
+      "space *": [
+        "workspace::SendKeystrokes",
+        "* /"
+      ],
       "space '": "terminal_panel::ToggleFocus",
       "space !": "terminal_panel::ToggleFocus",
       "space tab": "pane::AlternateFile",
       "space ;": "editor::ToggleComments",
       "space 0": "project_panel::ToggleFocus",
-      "space 1": ["workspace::ActivatePane", 0],
-      "space 2": ["workspace::ActivatePane", 1],
-      "space 3": ["workspace::ActivatePane", 2],
-      "space 4": ["workspace::ActivatePane", 3],
-      "space 5": ["workspace::ActivatePane", 4],
-      "space 6": ["workspace::ActivatePane", 5],
-      "space 7": ["workspace::ActivatePane", 6],
-      "space 8": ["workspace::ActivatePane", 7],
-      "space 9": ["workspace::ActivatePane", 8],
+      "space 1": [
+        "workspace::ActivatePane",
+        0
+      ],
+      "space 2": [
+        "workspace::ActivatePane",
+        1
+      ],
+      "space 3": [
+        "workspace::ActivatePane",
+        2
+      ],
+      "space 4": [
+        "workspace::ActivatePane",
+        3
+      ],
+      "space 5": [
+        "workspace::ActivatePane",
+        4
+      ],
+      "space 6": [
+        "workspace::ActivatePane",
+        5
+      ],
+      "space 7": [
+        "workspace::ActivatePane",
+        6
+      ],
+      "space 8": [
+        "workspace::ActivatePane",
+        7
+      ],
+      "space 9": [
+        "workspace::ActivatePane",
+        8
+      ],
       "space ?": "zed::OpenKeymap",
       "space v": "editor::SelectLargerSyntaxNode",
-
-      // ===== +Tasks (SPC :) =====
-      // Zed only has Spawn (picker) + Rerun. Extra Spawn aliases all show as
-      // "Spawn" in which-key ([zed#46348](https://github.com/zed-industries/zed/issues/46348)).
       "space : :": "task::Spawn",
       "space : s": "task::Spawn",
       "space : .": "task::Rerun",
       "space : r": "task::Rerun",
-      "space : R": ["task::Rerun", { "reevaluate_context": true }],
-
-      // ===== +Buffers (SPC b) =====
+      "space : R": [
+        "task::Rerun",
+        {
+          "reevaluate_context": true
+        }
+      ],
       "space b b": "tab_switcher::ToggleAll",
       "space b B": "tab_switcher::Toggle",
       "space b d": "pane::CloseActiveItem",
@@ -73,7 +99,10 @@
       "space b M": "pane::CloseOtherItems",
       "space b R": "git::RestoreFile",
       "space b T": "pane::TogglePinTab",
-      "space b Y": ["workspace::SendKeystrokes", "cmd-a cmd-c"],
+      "space b Y": [
+        "workspace::SendKeystrokes",
+        "cmd-a cmd-c"
+      ],
       "space b t": "pane::TogglePinTab",
       "space b h": "pane::SplitAndMoveLeft",
       "space b l": "pane::SplitAndMoveRight",
@@ -85,18 +114,43 @@
       "space b K": "pane::SplitAndMoveUp",
       "space b N n": "workspace::NewFile",
       "space b N h": "workspace::NewFileSplitHorizontal",
-      "space b 1": ["pane::ActivateItem", 0],
-      "space b 2": ["pane::ActivateItem", 1],
-      "space b 3": ["pane::ActivateItem", 2],
-      "space b 4": ["pane::ActivateItem", 3],
-      "space b 5": ["pane::ActivateItem", 4],
-      "space b 6": ["pane::ActivateItem", 5],
-      "space b 7": ["pane::ActivateItem", 6],
-      "space b 8": ["pane::ActivateItem", 7],
-      "space b 9": ["pane::ActivateItem", 8],
+      "space b 1": [
+        "pane::ActivateItem",
+        0
+      ],
+      "space b 2": [
+        "pane::ActivateItem",
+        1
+      ],
+      "space b 3": [
+        "pane::ActivateItem",
+        2
+      ],
+      "space b 4": [
+        "pane::ActivateItem",
+        3
+      ],
+      "space b 5": [
+        "pane::ActivateItem",
+        4
+      ],
+      "space b 6": [
+        "pane::ActivateItem",
+        5
+      ],
+      "space b 7": [
+        "pane::ActivateItem",
+        6
+      ],
+      "space b 8": [
+        "pane::ActivateItem",
+        7
+      ],
+      "space b 9": [
+        "pane::ActivateItem",
+        8
+      ],
       "space b 0": "pane::ActivateLastItem",
-
-      // ===== +Compile/Comments (SPC c) =====
       "space c l": "editor::ToggleComments",
       "space c L": "editor::ToggleBlockComments",
       "space c c": "task::Spawn",
@@ -106,8 +160,6 @@
       "space c a": "editor::ToggleCodeActions",
       "space c f": "editor::Format",
       "space c i": "editor::OrganizeImports",
-
-      // ===== +Debug (SPC d) =====
       "space d d": "debugger::Start",
       "space d c": "debugger::Continue",
       "space d s": "debugger::StepOver",
@@ -135,16 +187,12 @@
       "space d b l": "editor::EditLogBreakpoint",
       "space d b s": "debugger::ToggleEnableBreakpoint",
       "space d b S": "debugger::ToggleEnableBreakpoint",
-
-      // ===== +Errors (SPC e) =====
       "space e l": "diagnostics::Deploy",
       "space e e": "diagnostics::Deploy",
       "space e n": "editor::GoToDiagnostic",
       "space e p": "editor::GoToPreviousDiagnostic",
       "space e N": "editor::GoToPreviousDiagnostic",
       "space e f": "diagnostics::Deploy",
-
-      // ===== +File (SPC f) =====
       "space f f": "file_finder::Toggle",
       "space f s": "workspace::Save",
       "space f S": "workspace::SaveWithoutFormat",
@@ -179,13 +227,12 @@
       "space f y L": "editor::CopyFileLocation",
       "space f y c": "editor::CopyFileLocation",
       "space f y d": "workspace::CopyPath",
-
-      // ===== +Git (SPC g) =====
-      // Magit-like status via gitu (see tasks.json); native panel stays on g s
-      // which-key shows "Spawn" for all task::Spawn bindings (Zed limitation).
       "space g g": [
         "task::Spawn",
-        { "task_name": "gitu", "reveal_target": "center" }
+        {
+          "task_name": "gitu",
+          "reveal_target": "center"
+        }
       ],
       "space g s": "git_panel::ToggleFocus",
       "space g b": "git::Blame",
@@ -209,8 +256,6 @@
       "space g h d": "editor::ToggleSelectedDiffHunks",
       "space g h n": "editor::GoToHunk",
       "space g h p": "editor::GoToPreviousHunk",
-
-      // ===== +Help (SPC h) =====
       "space h k": "zed::OpenKeymap",
       "space h K": "zed::OpenKeymapFile",
       "space h d": "zed::OpenSettings",
@@ -218,24 +263,30 @@
       "space h I": "zed::Extensions",
       "space h T": "zed::OpenKeymap",
       "space h e": "zed::Extensions",
-
-      // ===== +Insert (SPC i) =====
       "space i j": "editor::NewlineBelow",
       "space i k": "editor::NewlineAbove",
       "space i s": "assistant::InlineAssist",
-
-      // ===== +Jump (SPC j) =====
       "space j i": "outline::Toggle",
       "space j I": "project_symbols::Toggle",
-      // Helix jump labels (closest to Doom avy / VS Code Jumpy). Full avy-goto-char is not in Zed.
       "space j j": "vim::HelixJumpToWord",
       "space j l": "pane::DeploySearch",
       "space j n": "editor::NewlineBelow",
       "space j v": "outline::Toggle",
       "space j w": "vim::HelixJumpToWord",
-      // vim f / sneak (type char(s), jump to next match — no labels)
-      "space j f": ["vim::PushFindForward", { "before": false, "multiline": false }],
-      "space j F": ["vim::PushFindBackward", { "after": false, "multiline": false }],
+      "space j f": [
+        "vim::PushFindForward",
+        {
+          "before": false,
+          "multiline": false
+        }
+      ],
+      "space j F": [
+        "vim::PushFindBackward",
+        {
+          "after": false,
+          "multiline": false
+        }
+      ],
       "space j s": "vim::PushSneak",
       "space j S": "vim::PushSneakBackward",
       "space j =": "editor::Format",
@@ -247,8 +298,6 @@
       "space j r": "editor::FindAllReferences",
       "space j t": "editor::GoToTypeDefinition",
       "space j m": "editor::GoToImplementation",
-
-      // ===== +Project (SPC p) =====
       "space p f": "file_finder::Toggle",
       "space p p": "projects::OpenRecent",
       "space p l": "projects::OpenRecent",
@@ -261,23 +310,23 @@
       "space p y": "workspace::CopyRelativePath",
       "space p r": "projects::OpenRemote",
       "space p Y": "workspace::CopyRelativePath",
-
-      // ===== +Quit (SPC q) =====
       "space q q": "workspace::CloseWindow",
       "space q f": "workspace::CloseWindow",
       "space q Q": "zed::Quit",
-      "space q r": ["workspace::SendKeystrokes", "cmd-shift-p reload window enter"],
-      "space q R": ["workspace::SendKeystrokes", "cmd-shift-p reload window enter"],
+      "space q r": [
+        "workspace::SendKeystrokes",
+        "cmd-shift-p reload window enter"
+      ],
+      "space q R": [
+        "workspace::SendKeystrokes",
+        "cmd-shift-p reload window enter"
+      ],
       "space q s": "workspace::SaveAll",
-
-      // ===== +Resume (SPC r) =====
       "space r b": "tab_switcher::ToggleAll",
       "space r s": "pane::DeploySearch",
       "space r p": "projects::OpenRecent",
       "space r r": "task::Rerun",
       "space r .": "task::Rerun",
-
-      // ===== +Search/Symbol (SPC s) =====
       "space s p": "pane::DeploySearch",
       "space s P": "pane::DeploySearch",
       "space s s": "buffer_search::Deploy",
@@ -292,8 +341,6 @@
       "space s g": "project_symbols::Toggle",
       "space s c": "vim::ClearOperators",
       "space s h": "editor::SelectAllMatches",
-
-      // ===== +Toggles (SPC t) =====
       "space t l": "editor::ToggleSoftWrap",
       "space t i": "editor::ToggleInlayHints",
       "space t n": "editor::ToggleLineNumbers",
@@ -304,8 +351,6 @@
       "space t z": "workspace::ToggleZoom",
       "space t t": "theme::ToggleMode",
       "space t b": "editor::ToggleBreakpoint",
-
-      // ===== +Window (SPC w) =====
       "space w /": "pane::SplitRight",
       "space w v": "pane::SplitRight",
       "space w -": "pane::SplitDown",
@@ -316,7 +361,6 @@
       "space w l": "workspace::ActivatePaneRight",
       "space w w": "workspace::ActivateNextPane",
       "space w W": "workspace::ActivatePreviousPane",
-      "space w d": "pane::CloseActiveItem",
       "space w D": "workspace::CloseInactiveTabsAndPanes",
       "space w m": "workspace::CloseAllDocks",
       "space w M": "workspace::ToggleZoom",
@@ -333,12 +377,22 @@
       "space w L": "workspace::MovePaneRight",
       "space w J": "workspace::MovePaneDown",
       "space w K": "workspace::MovePaneUp",
-      "space w 1": ["workspace::ActivatePane", 0],
-      "space w 2": ["workspace::ActivatePane", 1],
-      "space w 3": ["workspace::ActivatePane", 2],
-      "space w 4": ["workspace::ActivatePane", 3],
-
-      // ===== +Text (SPC x) =====
+      "space w 1": [
+        "workspace::ActivatePane",
+        0
+      ],
+      "space w 2": [
+        "workspace::ActivatePane",
+        1
+      ],
+      "space w 3": [
+        "workspace::ActivatePane",
+        2
+      ],
+      "space w 4": [
+        "workspace::ActivatePane",
+        3
+      ],
       "space x j": "editor::JoinLines",
       "space x u": "vim::ConvertToLowerCase",
       "space x U": "vim::ConvertToUpperCase",
@@ -354,8 +408,6 @@
       "space x l d": "editor::SortLinesCaseInsensitive",
       "space x l S": "editor::SortLinesByLength",
       "space x l D": "editor::SortLinesCaseInsensitive",
-
-      // ===== +Zoom/Fold (SPC z) =====
       "space z z": "workspace::ToggleZoom",
       "space z m": "editor::FoldAll",
       "space z r": "editor::UnfoldAll",
@@ -371,8 +423,6 @@
       "space z +": "zed::IncreaseBufferFontSize",
       "space z -": "zed::DecreaseBufferFontSize",
       "space z 0": "zed::ResetBufferFontSize",
-
-      // ===== +Diff (SPC D) =====
       "space shift-d d": "git::Diff",
       "space shift-d r": "git::ReviewDiff",
       "space shift-d c": "git::Commit",
@@ -381,15 +431,11 @@
       "space shift-d w": "git::Worktree",
       "space shift-d h": "editor::ToggleSelectedDiffHunks",
       "space shift-d e": "editor::ExpandAllDiffHunks",
-
-      // ===== +Frame (SPC F) =====
       "space shift-f f": "zed::ToggleFullScreen",
       "space shift-f n": "workspace::NewWindow",
       "space shift-f N": "workspace::NewWindow",
       "space shift-f o": "projects::OpenRecent",
       "space shift-f d": "workspace::CloseWindow",
-
-      // ===== +Show / UI (SPC S / SPC T) =====
       "space shift-s p": "project_panel::ToggleFocus",
       "space shift-s s": "projects::OpenRecent",
       "space shift-s r": "workspace::ToggleRightDock",
@@ -411,25 +457,22 @@
       "space shift-t m": "workspace::ToggleBottomDock",
       "space shift-t s": "search::ToggleWholeWord",
       "space shift-t t": "theme::ToggleMode",
-
-      // ===== +Layouts (SPC l) =====
       "space l d": "workspace::CloseWindow",
-
-      // ===== +Agent (SPC a) =====
       "space a a": "agent::ToggleFocus",
       "space a i": "agent::ToggleFocus",
       "space a n": "agent::NewThread",
       "space a s": "agent::OpenSettings",
       "space a d": "agent::OpenAgentDiff",
-
-      // ===== Misc =====
       "ctrl-w ctrl-w": "agent::ToggleFocus"
     }
   },
   {
-    // Default vim.json binds `space f` → file_finder under `!Editor && !Terminal`.
-    // That predicate can match the Pane node even with an Editor focused, which makes
-    // `SPC f` a complete chord that fires after ~1s. Null it here at the source.
+    "context": "Editor",
+    "bindings": {
+      "alt-z": "editor::ToggleSoftWrap"
+    }
+  },
+  {
     "context": "!Editor && !Terminal",
     "bindings": {
       "space f": null,
@@ -446,25 +489,6 @@
     }
   },
   {
-    "context": "EmptyPane || Welcome",
-    "bindings": {
-      "space space": "command_palette::Toggle",
-      "space p p": "projects::OpenRecent",
-      "space p f": "file_finder::Toggle",
-      "space p t": "project_panel::ToggleFocus",
-      "space /": "pane::DeploySearch",
-      "space '": "terminal_panel::ToggleFocus",
-      "space f f": "file_finder::Toggle",
-      "space f s": "workspace::Save",
-      "space f e d": "zed::OpenKeymapFile",
-      "space f e s": "zed::OpenSettingsFile",
-      "space q q": "workspace::CloseWindow",
-      "space q Q": "zed::Quit"
-    }
-  },
-  {
-    // Kill Helix/default single-key space chords only in helix modes so they
-    // cannot shadow Spacemacs `space f f` / `space b b` / etc.
     "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
     "bindings": {
       "space f": null,
@@ -484,6 +508,344 @@
     "context": "ProjectSearchBar > Editor",
     "bindings": {
       "escape": "pane::CloseActiveItem"
+    }
+  },
+  {
+    "context": "Terminal || EmptyPane || Welcome || (ProjectPanel && not_editing) || GitPanel || DebugPanel || OutlinePanel || MarkdownPreview || Markdown",
+    "bindings": {
+      "space": null,
+      "space :": null,
+      "space a": null,
+      "space b": null,
+      "space c": null,
+      "space d": null,
+      "space e": null,
+      "space f": null,
+      "space g": null,
+      "space h": null,
+      "space i": null,
+      "space j": null,
+      "space l": null,
+      "space p": null,
+      "space q": null,
+      "space r": null,
+      "space s": null,
+      "space shift-d": null,
+      "space shift-f": null,
+      "space shift-s": null,
+      "space shift-t": null,
+      "space t": null,
+      "space w": null,
+      "space z": null,
+      "space b N": null,
+      "space d b": null,
+      "space f e": null,
+      "space f y": null,
+      "space g f": null,
+      "space !": "terminal_panel::ToggleFocus",
+      "space '": "terminal_panel::ToggleFocus",
+      "space /": "pane::DeploySearch",
+      "space 0": "project_panel::ToggleFocus",
+      "space 1": [
+        "workspace::ActivatePane",
+        0
+      ],
+      "space 2": [
+        "workspace::ActivatePane",
+        1
+      ],
+      "space 3": [
+        "workspace::ActivatePane",
+        2
+      ],
+      "space 4": [
+        "workspace::ActivatePane",
+        3
+      ],
+      "space 5": [
+        "workspace::ActivatePane",
+        4
+      ],
+      "space 6": [
+        "workspace::ActivatePane",
+        5
+      ],
+      "space 7": [
+        "workspace::ActivatePane",
+        6
+      ],
+      "space 8": [
+        "workspace::ActivatePane",
+        7
+      ],
+      "space 9": [
+        "workspace::ActivatePane",
+        8
+      ],
+      "space : .": "task::Rerun",
+      "space : :": "task::Spawn",
+      "space : R": [
+        "task::Rerun",
+        {
+          "reevaluate_context": true
+        }
+      ],
+      "space : r": "task::Rerun",
+      "space : s": "task::Spawn",
+      "space ?": "zed::OpenKeymap",
+      "space a a": "agent::ToggleFocus",
+      "space a d": "agent::OpenAgentDiff",
+      "space a i": "agent::ToggleFocus",
+      "space a n": "agent::NewThread",
+      "space a s": "agent::OpenSettings",
+      "space b 0": "pane::ActivateLastItem",
+      "space b 1": [
+        "pane::ActivateItem",
+        0
+      ],
+      "space b 2": [
+        "pane::ActivateItem",
+        1
+      ],
+      "space b 3": [
+        "pane::ActivateItem",
+        2
+      ],
+      "space b 4": [
+        "pane::ActivateItem",
+        3
+      ],
+      "space b 5": [
+        "pane::ActivateItem",
+        4
+      ],
+      "space b 6": [
+        "pane::ActivateItem",
+        5
+      ],
+      "space b 7": [
+        "pane::ActivateItem",
+        6
+      ],
+      "space b 8": [
+        "pane::ActivateItem",
+        7
+      ],
+      "space b 9": [
+        "pane::ActivateItem",
+        8
+      ],
+      "space b B": "tab_switcher::Toggle",
+      "space b H": "pane::SplitAndMoveLeft",
+      "space b J": "pane::SplitAndMoveDown",
+      "space b K": "pane::SplitAndMoveUp",
+      "space b L": "pane::SplitAndMoveRight",
+      "space b M": "pane::CloseOtherItems",
+      "space b N h": "workspace::NewFileSplitHorizontal",
+      "space b N n": "workspace::NewFile",
+      "space b R": "git::RestoreFile",
+      "space b T": "pane::TogglePinTab",
+      "space b b": "tab_switcher::ToggleAll",
+      "space b d": "pane::CloseActiveItem",
+      "space b h": "pane::SplitAndMoveLeft",
+      "space b j": "pane::SplitAndMoveDown",
+      "space b k": "pane::SplitAndMoveUp",
+      "space b l": "pane::SplitAndMoveRight",
+      "space b n": "pane::ActivateNextItem",
+      "space b p": "pane::ActivatePreviousItem",
+      "space b s": "workspace::NewFile",
+      "space b t": "pane::TogglePinTab",
+      "space b u": "pane::ReopenClosedItem",
+      "space c c": "task::Spawn",
+      "space d C": "debugger::Continue",
+      "space d D": "debugger::Start",
+      "space d R": "debugger::Rerun",
+      "space d S": "debugger::Stop",
+      "space d b D": "debugger::UnsetBreakpoint",
+      "space d b E": "debugger::ToggleEnableBreakpoint",
+      "space d b S": "debugger::ToggleEnableBreakpoint",
+      "space d b d": "debugger::UnsetBreakpoint",
+      "space d b e": "debugger::ToggleEnableBreakpoint",
+      "space d b s": "debugger::ToggleEnableBreakpoint",
+      "space d c": "debugger::Continue",
+      "space d d": "debugger::Start",
+      "space d i": "debugger::StepInto",
+      "space d j": "debugger::ToggleThreadPicker",
+      "space d o": "debugger::StepOut",
+      "space d p": "debugger::Pause",
+      "space d r": "debugger::Restart",
+      "space d s": "debugger::StepOver",
+      "space d t": "debug_panel::ToggleFocus",
+      "space d v": "debug_panel::ToggleFocus",
+      "space d w": "debug_panel::ToggleFocus",
+      "space e e": "diagnostics::Deploy",
+      "space e f": "diagnostics::Deploy",
+      "space e l": "diagnostics::Deploy",
+      "space f L": "workspace::OpenWithSystem",
+      "space f S": "workspace::SaveWithoutFormat",
+      "space f T": "workspace::NewTerminal",
+      "space f a": "workspace::SaveAll",
+      "space f e D": "zed::OpenKeymap",
+      "space f e K": "zed::OpenKeymap",
+      "space f e S": "zed::OpenSettings",
+      "space f e W": "zed::OpenSettings",
+      "space f e d": "zed::OpenKeymapFile",
+      "space f e k": "zed::OpenKeymapFile",
+      "space f e l": "zed::OpenSettings",
+      "space f e s": "zed::OpenSettingsFile",
+      "space f e w": "zed::OpenSettingsFile",
+      "space f f": "file_finder::Toggle",
+      "space f n": "workspace::NewFile",
+      "space f o": "workspace::Open",
+      "space f r": "pane::ReopenClosedItem",
+      "space f s": "workspace::Save",
+      "space f t": "pane::RevealInProjectPanel",
+      "space f w": "workspace::SaveAs",
+      "space f y D": "workspace::CopyRelativePath",
+      "space f y Y": "workspace::CopyRelativePath",
+      "space f y d": "workspace::CopyPath",
+      "space f y y": "workspace::CopyPath",
+      "space g B": "branches::OpenRecent",
+      "space g D": "git::ReviewDiff",
+      "space g F": "git::Pull",
+      "space g P": "git::Push",
+      "space g S": "git::StageFile",
+      "space g U": "git::UnstageFile",
+      "space g b": "git::Blame",
+      "space g c": "git::Clone",
+      "space g d": "git::Diff",
+      "space g f d": "git::Diff",
+      "space g f f": "git::Fetch",
+      "space g f l": "git::FileHistory",
+      "space g g": [
+        "task::Spawn",
+        {
+          "task_name": "gitu",
+          "reveal_target": "center"
+        }
+      ],
+      "space g i": "git::Init",
+      "space g m": "git::OpenModifiedFiles",
+      "space g r": "git::RestoreFile",
+      "space g s": "git_panel::ToggleFocus",
+      "space g w": "git::Worktree",
+      "space h D": "zed::OpenSettings",
+      "space h I": "zed::Extensions",
+      "space h K": "zed::OpenKeymapFile",
+      "space h T": "zed::OpenKeymap",
+      "space h d": "zed::OpenSettings",
+      "space h e": "zed::Extensions",
+      "space h k": "zed::OpenKeymap",
+      "space i s": "assistant::InlineAssist",
+      "space j l": "pane::DeploySearch",
+      "space l d": "workspace::CloseWindow",
+      "space p /": "pane::DeploySearch",
+      "space p R": "pane::DeploySearch",
+      "space p T": "project_panel::ToggleFocus",
+      "space p Y": "workspace::CopyRelativePath",
+      "space p a": "workspace::AddFolderToProject",
+      "space p c": "task::Spawn",
+      "space p f": "file_finder::Toggle",
+      "space p l": "projects::OpenRecent",
+      "space p p": "projects::OpenRecent",
+      "space p r": "projects::OpenRemote",
+      "space p t": "project_panel::ToggleFocus",
+      "space p y": "workspace::CopyRelativePath",
+      "space q Q": "zed::Quit",
+      "space q R": [
+        "workspace::SendKeystrokes",
+        "cmd-shift-p reload window enter"
+      ],
+      "space q f": "pane::CloseActiveItem",
+      "space q q": "pane::CloseActiveItem",
+      "space q r": [
+        "workspace::SendKeystrokes",
+        "cmd-shift-p reload window enter"
+      ],
+      "space q s": "workspace::SaveAll",
+      "space r .": "task::Rerun",
+      "space r b": "tab_switcher::ToggleAll",
+      "space r p": "projects::OpenRecent",
+      "space r r": "task::Rerun",
+      "space r s": "pane::DeploySearch",
+      "space s P": "pane::DeploySearch",
+      "space s p": "pane::DeploySearch",
+      "space shift-d c": "git::Commit",
+      "space shift-d d": "git::Diff",
+      "space shift-d m": "git::OpenModifiedFiles",
+      "space shift-d r": "git::ReviewDiff",
+      "space shift-d s": "git_panel::ToggleFocus",
+      "space shift-d w": "git::Worktree",
+      "space shift-f N": "workspace::NewWindow",
+      "space shift-f d": "workspace::CloseWindow",
+      "space shift-f f": "zed::ToggleFullScreen",
+      "space shift-f n": "workspace::NewWindow",
+      "space shift-f o": "projects::OpenRecent",
+      "space shift-s a": "agent::ToggleFocus",
+      "space shift-s d": "debug_panel::ToggleFocus",
+      "space shift-s e": "diagnostics::Deploy",
+      "space shift-s g": "git_panel::ToggleFocus",
+      "space shift-s n": "diagnostics::Deploy",
+      "space shift-s o": "outline_panel::ToggleFocus",
+      "space shift-s p": "project_panel::ToggleFocus",
+      "space shift-s r": "workspace::ToggleRightDock",
+      "space shift-s s": "projects::OpenRecent",
+      "space shift-s t": "terminal_panel::ToggleFocus",
+      "space shift-s x": "diagnostics::Deploy",
+      "space shift-t a": "workspace::ToggleAllDocks",
+      "space shift-t b": "workspace::ToggleBottomDock",
+      "space shift-t l": "workspace::ToggleLeftDock",
+      "space shift-t m": "workspace::ToggleBottomDock",
+      "space shift-t r": "workspace::ToggleRightDock",
+      "space shift-t t": "theme::ToggleMode",
+      "space shift-t z": "workspace::ToggleZoom",
+      "space space": "command_palette::Toggle",
+      "space t t": "theme::ToggleMode",
+      "space t z": "workspace::ToggleZoom",
+      "space tab": "pane::AlternateFile",
+      "space w -": "pane::SplitDown",
+      "space w /": "pane::SplitRight",
+      "space w 1": [
+        "workspace::ActivatePane",
+        0
+      ],
+      "space w 2": [
+        "workspace::ActivatePane",
+        1
+      ],
+      "space w 3": [
+        "workspace::ActivatePane",
+        2
+      ],
+      "space w 4": [
+        "workspace::ActivatePane",
+        3
+      ],
+      "space w D": "workspace::CloseInactiveTabsAndPanes",
+      "space w F": "workspace::NewWindow",
+      "space w H": "workspace::MovePaneLeft",
+      "space w J": "workspace::MovePaneDown",
+      "space w K": "workspace::MovePaneUp",
+      "space w L": "workspace::MovePaneRight",
+      "space w M": "workspace::ToggleZoom",
+      "space w W": "workspace::ActivatePreviousPane",
+      "space w d": "pane::CloseActiveItem",
+      "space w h": "workspace::ActivatePaneLeft",
+      "space w j": "workspace::ActivatePaneDown",
+      "space w k": "workspace::ActivatePaneUp",
+      "space w l": "workspace::ActivatePaneRight",
+      "space w m": "workspace::CloseAllDocks",
+      "space w o": "workspace::NewWindow",
+      "space w q": "pane::CloseActiveItem",
+      "space w s": "pane::SplitDown",
+      "space w v": "pane::SplitRight",
+      "space w w": "workspace::ActivateNextPane",
+      "space w x": "workspace::CloseAllItemsAndPanes",
+      "space w z": "pane::JoinAll",
+      "space z +": "zed::IncreaseBufferFontSize",
+      "space z -": "zed::DecreaseBufferFontSize",
+      "space z 0": "zed::ResetBufferFontSize",
+      "space z z": "workspace::ToggleZoom"
     }
   },
   {
@@ -510,7 +872,6 @@
     }
   },
   {
-    // Magit-inspired Git panel (from wangfenjin/zed)
     "context": "GitPanel",
     "bindings": {
       "tab": "git::Diff",
@@ -526,8 +887,18 @@
       "S": "git::StageAll",
       "u": "git::UnstageFile",
       "U": "git::UnstageAll",
-      "x": ["git::RestoreFile", { "skip_prompt": false }],
-      "X": ["git::RestoreFile", { "skip_prompt": true }],
+      "x": [
+        "git::RestoreFile",
+        {
+          "skip_prompt": false
+        }
+      ],
+      "X": [
+        "git::RestoreFile",
+        {
+          "skip_prompt": true
+        }
+      ],
       "escape": "workspace::ToggleRightDock",
       "q": "workspace::ToggleRightDock"
     }

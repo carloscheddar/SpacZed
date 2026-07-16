@@ -10,6 +10,7 @@ Built on ideas from [wangfenjin/zed](https://github.com/wangfenjin/zed), expande
 
 - **~330 Space-leader chords** across buffers, windows, files, project, git, search, debug, text, tasks, and UI toggles
 - Vim mode + native which-key discovery
+- **Workspace-safe Space chords in non-editor panes** (Terminal/gitu, EmptyPane, Project/Git/Debug/Outline/Markdown preview; not Agent thread input)
 - **Magit via [gitu](https://github.com/altsem/gitu)** — `SPC g g` opens a Magit-inspired TUI in the center pane
 - Magit-inspired bindings in Zed’s native Git panel (`SPC g s`) as a lightweight fallback
 - VSpaceCode-style aliases where Zed has a matching action (file copy variants, debug, tasks, layouts, etc.)
@@ -104,6 +105,8 @@ Do **not** replace a personalized `settings.json` wholesale unless you intend to
 | `SPC j s` | vim sneak — find next 2-char sequence |
 | `SPC j i` | Outline (symbols) |
 | `SPC l d` | Close window / layout |
+| `SPC t l` | Toggle soft wrap (truncate) |
+| `alt-z` / `opt-z` | Toggle soft wrap (VS Code muscle memory) |
 | `SPC a i` | Agent panel |
 | `SPC q q` | Close window |
 | `SPC : :` | Task picker (Spawn) |
@@ -155,6 +158,8 @@ Do **not** replace a personalized `settings.json` wholesale unless you intend to
 
 **Text (`SPC x`)** — join/case/sort/indent/rewrap/code actions.
 
+Soft wrap / truncate: `SPC t l` or `alt-z` (`opt-z` on macOS) → `editor::ToggleSoftWrap` (Zed no longer ships this as a default).
+
 **Tasks (`SPC :`)** — spawn picker (`SPC : :` / `SPC : s`), rerun last (`SPC : .` / `SPC : r`), rerun with fresh context (`SPC : R`). Zed has no build/test/configure task types, and which-key cannot show task names for `task::Spawn` yet ([zed#46348](https://github.com/zed-industries/zed/issues/46348)).
 
 ### Magit via gitu (`SPC g g`)
@@ -162,6 +167,8 @@ Do **not** replace a personalized `settings.json` wholesale unless you intend to
 Opens [gitu](https://github.com/altsem/gitu) in the center pane (see [`tasks.json`](tasks.json)).
 
 Install Magit-friendly overrides from [`gitu-config.toml`](gitu-config.toml) to `~/.config/gitu/config.toml` (maps discard to Magit `x`; default gitu uses `K` only).
+
+**Non-editor panes:** the same Space leader works in Terminal (including gitu), EmptyPane/Welcome, Project panel, Git panel, Debug panel, Outline panel, and **Markdown preview** for every **workspace-safe** chord (files/projects/git/windows/tasks/toggles like `SPC t z`, docks, …). Editor-only chords (soft wrap, vim motions, format, folds, …) stay vim-editor-only. In those panes, `SPC q q` / `SPC w d` close the active pane item (handy for dismissing gitu) rather than the whole window. **Agent panel thread input is excluded** so Space inserts normally while typing.
 
 > which-key shows `Spawn` for `task::Spawn` bindings ([zed#46348](https://github.com/zed-industries/zed/issues/46348)); custom labels are not supported yet.
 
@@ -219,7 +226,10 @@ Avoid `!menu` on the main Spacemacs context. This repo uses `Editor && VimContro
 Some vim actions (e.g. `vim::PushFindForward`) need an input object. See `SPC j f` in [`keymap.json`](keymap.json) for the correct form.
 
 **Space does nothing in insert mode**  
-Expected — leader bindings are for normal/visual (vim) modes.
+Expected for the Spacemacs leader — it is bound only in vim **normal/visual**, so Space inserts in insert mode (including the agent thread). Use Escape then `SPC …` for leader chords.
+
+**`SPC t z` / other leader chords fail inside gitu or panels**  
+Those panes are not vim-editor normal mode. This repo mirrors workspace-safe Space chords under `Terminal || EmptyPane || Welcome || ProjectPanel || GitPanel || DebugPanel || OutlinePanel || MarkdownPreview` (AgentPanel omitted so thread typing works). Soft wrap / truncate still cannot change gitu’s own UI ([gitu#277](https://github.com/altsem/gitu/issues/277)).
 
 **`SPC g g` fails / “gitu: command not found”**  
 Install gitu (`brew install gitu`) and ensure it is on Zed’s `PATH`. Copy [`tasks.json`](tasks.json) to `~/.config/zed/tasks.json`.
