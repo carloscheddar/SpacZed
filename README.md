@@ -2,19 +2,21 @@
 
 Spacemacs / [VSpaceCode](https://github.com/VSpaceCode/VSpaceCode)-style **Space leader** keybindings for [Zed](https://zed.dev), with vim mode and which-key.
 
-Built on ideas from [wangfenjin/zed](https://github.com/wangfenjin/zed), expanded toward VSpaceCode menus, and tuned so leader prefixes like `SPC f` wait for the full chord instead of opening the file finder after a timeout.
+Built on ideas from [wangfenjin/zed](https://github.com/wangfenjin/zed), expanded toward VSpaceCode / Doom-style menus, and tuned so leader prefixes like `SPC f` wait for the full chord instead of opening the file finder after a timeout.
 
-> Not full Spacemacs or VSpaceCode. Zed has no Evil layer and no major-mode (`SPC m`) menus. This is a practical Spacemacs-style keymap on top of Zed’s vim mode.
+> Not full Spacemacs, Doom, or VSpaceCode. Zed has no Evil layer and no major-mode (`SPC m`) menus. This is a practical Spacemacs-style keymap on top of Zed’s vim mode and native actions.
 
 ## Features
 
-- ~260 Space-leader chords (buffers, windows, files, project, git, search, debug, …)
+- **~330 Space-leader chords** across buffers, windows, files, project, git, search, debug, text, tasks, and UI toggles
 - Vim mode + native which-key discovery
 - **Magit via [gitu](https://github.com/altsem/gitu)** — `SPC g g` opens a Magit-inspired TUI in the center pane
 - Magit-inspired bindings in Zed’s native Git panel (`SPC g s`) as a lightweight fallback
+- VSpaceCode-style aliases where Zed has a matching action (file copy variants, debug, tasks, layouts, etc.)
 - Fixes for Zed pitfalls:
   - `SPC f` (and similar) nulled as **prefixes** so they do not time out into file finder
   - Main context avoids `!menu` so which-key does not hide Spacemacs chords
+  - Actions that require input (e.g. `vim::PushFindForward`) are bound with the required `[name, input]` form
 
 ## Requirements
 
@@ -77,9 +79,11 @@ Do **not** replace a personalized `settings.json` wholesale unless you intend to
 | `SPC f f` | Find file |
 | `SPC f s` | Save |
 | `SPC f e d` | Open keymap file |
+| `SPC f y Y` | Copy relative path |
 | `SPC p f` | Find file in project |
 | `SPC p p` | Recent projects |
 | `SPC p t` | Project panel |
+| `SPC p y` | Copy relative path (project) |
 | `SPC b b` | Buffer / tab switcher |
 | `SPC b d` | Close buffer |
 | `SPC w /` | Split right |
@@ -87,32 +91,67 @@ Do **not** replace a personalized `settings.json` wholesale unless you intend to
 | `SPC g g` | **gitu** (Magit-like status) |
 | `SPC g s` | Native Git panel |
 | `SPC g b` | Blame |
-| `SPC s s` | Outline (symbols) |
+| `SPC s s` | Search in file |
+| `SPC s j` | Outline (symbols) |
 | `SPC e l` | Diagnostics |
 | `SPC d d` | Start debugger |
+| `SPC j j` | Helix jump-to-word (labels; closest to Doom avy) |
+| `SPC j f` | vim `f` — find next char |
+| `SPC j s` | vim sneak — find next 2-char sequence |
+| `SPC j i` | Outline (symbols) |
+| `SPC l d` | Close window / layout |
 | `SPC a i` | Agent panel |
 | `SPC q q` | Close window |
+| `SPC : :` | Task picker (Spawn) |
+| `SPC : .` | Rerun last task |
+| `SPC : R` | Rerun with fresh file/context |
 
 ### Menus (second key after `SPC`)
 
 | Key | Menu |
 |-----|------|
+| `:` | Tasks |
+| `a` | Agent |
 | `b` | Buffers |
-| `w` | Windows |
-| `f` | Files |
-| `p` | Project |
-| `g` | Git |
-| `s` | Search / symbol |
-| `e` | Errors |
 | `c` | Comments / code |
 | `d` | Debug |
+| `e` | Errors |
+| `f` | Files |
+| `g` | Git |
+| `h` | Help |
+| `i` | Insert |
 | `j` | Jump |
-| `t` | Toggles |
+| `l` | Layouts |
+| `p` | Project |
 | `q` | Quit |
-| `a` | Agent |
+| `r` | Resume / recent |
+| `s` | Search / symbol |
+| `t` | Toggles |
+| `w` | Windows |
 | `x` | Text |
 | `z` | Zoom / fold |
-| `:` | Tasks |
+| `D` (`shift-d`) | Diff |
+| `F` (`shift-f`) | Frame |
+| `S` (`shift-s`) | Show panels |
+| `T` (`shift-t`) | UI toggles |
+
+### Selected menu details
+
+**Files (`SPC f`)** — find/save/open, open keymap/settings (`SPC f e *`), copy path variants (`SPC f y *`), open with system (`SPC f L`), new terminal (`SPC f T`).
+
+**Project (`SPC p`)** — find file, recent projects, project panel, copy relative path (`SPC p y`), add folder, remote projects.
+
+**Buffers (`SPC b`)** — switch/close/scratch, pin (`SPC b t` / `SPC b T`), restore (`SPC b R`), copy buffer (`SPC b Y`), move to splits.
+
+**Git (`SPC g`)** — gitu status (`SPC g g`), native panel (`SPC g s`), blame/branch/diff/stage/push/pull/fetch/worktree/hunks.
+
+**Debug (`SPC d`)** — start/continue/step/stop, panel focus, breakpoint toggle/unset/enable (`SPC d b *`).
+
+**Jump (`SPC j`)** — Helix word-jump labels (`SPC j j` / `SPC j w`; closest to Doom avy / VS Code Jumpy), vim `f`/`F` (`SPC j f`/`F`), sneak (`SPC j s`/`S`), outline, go to definition/refs. Zed has no full avy/EasyMotion char labels yet.
+
+**Text (`SPC x`)** — join/case/sort/indent/rewrap/code actions.
+
+**Tasks (`SPC :`)** — spawn picker (`SPC : :` / `SPC : s`), rerun last (`SPC : .` / `SPC : r`), rerun with fresh context (`SPC : R`). Zed has no build/test/configure task types, and which-key cannot show task names for `task::Spawn` yet ([zed#46348](https://github.com/zed-industries/zed/issues/46348)).
 
 ### Magit via gitu (`SPC g g`)
 
@@ -151,13 +190,14 @@ Lightweight Magit-ish chords when the built-in panel is focused:
 | `f f` | Fetch |
 | `q` / `esc` | Close panel |
 
-## Known gaps vs Spacemacs / VSpaceCode
+## Known gaps vs Spacemacs / Doom / VSpaceCode
 
-- No `SPC m` major-mode bindings
-- Weak / missing `SPC l` layouts
-- Many VS Code–only VSpaceCode commands have no Zed equivalent
-- which-key shows action names (not Spacemacs `+File` labels)
-- Vim mode ≠ Evil
+- No full avy / EasyMotion / Jumpy (labeled jump-to-*any*-char); closest is Helix word jump (`SPC j j`)
+- No `SPC m` major-mode / localleader menus (language-specific trees)
+- Many VS Code–only VSpaceCode commands have no Zed equivalent (skipped rather than faked)
+- Some chords are **aliases** of nearby Zed actions (best-effort parity, not 1:1 Spacemacs behavior)
+- which-key shows action names (not Spacemacs `+File` labels); `task::Spawn` always shows as Spawn (so the task menu only lists distinct actions: Spawn / Rerun)
+- Vim mode ≠ Evil (no full Evil text objects / ex command ecosystem)
 
 ## Troubleshooting
 
@@ -166,6 +206,9 @@ A complete `space f` binding is winning (often Zed’s default). This repo nulls
 
 **which-key only shows `e` under `SPC f`**  
 Avoid `!menu` on the main Spacemacs context. This repo uses `Editor && VimControl && !VimWaiting`.
+
+**Keymap errors like “requires input data via [name, input]”**  
+Some vim actions (e.g. `vim::PushFindForward`) need an input object. See `SPC j f` in [`keymap.json`](keymap.json) for the correct form.
 
 **Space does nothing in insert mode**  
 Expected — leader bindings are for normal/visual (vim) modes.
@@ -181,12 +224,14 @@ If you maintain bindings in `~/.config/zed/` and want to refresh this repo:
 cp ~/.config/zed/keymap.json ./keymap.json
 cp ~/.config/zed/tasks.json ./tasks.json
 # Re-check settings.json stays minimal (no personal agent/theme keys)
+# Keep README.md in sync when adding/removing chords
 ```
 
 ## Credits
 
 - [wangfenjin/zed](https://github.com/wangfenjin/zed) — Spacemacs-for-Zed starter
 - [VSpaceCode](https://github.com/VSpaceCode/VSpaceCode) — menu mnemonics
+- [Doom Emacs](https://github.com/doomemacs/doomemacs) — leader / localleader conventions
 - [gitu](https://github.com/altsem/gitu) — Magit-inspired Git TUI
 - [Zed](https://zed.dev) — vim mode + which-key + tasks
 

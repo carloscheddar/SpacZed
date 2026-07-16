@@ -54,9 +54,13 @@
       "space v": "editor::SelectLargerSyntaxNode",
 
       // ===== +Tasks (SPC :) =====
+      // Zed only has Spawn (picker) + Rerun. Extra Spawn aliases all show as
+      // "Spawn" in which-key ([zed#46348](https://github.com/zed-industries/zed/issues/46348)).
       "space : :": "task::Spawn",
+      "space : s": "task::Spawn",
       "space : .": "task::Rerun",
       "space : r": "task::Rerun",
+      "space : R": ["task::Rerun", { "reevaluate_context": true }],
 
       // ===== +Buffers (SPC b) =====
       "space b b": "tab_switcher::ToggleAll",
@@ -67,6 +71,9 @@
       "space b p": "pane::ActivatePreviousItem",
       "space b u": "pane::ReopenClosedItem",
       "space b M": "pane::CloseOtherItems",
+      "space b R": "git::RestoreFile",
+      "space b T": "pane::TogglePinTab",
+      "space b Y": ["workspace::SendKeystrokes", "cmd-a cmd-c"],
       "space b t": "pane::TogglePinTab",
       "space b h": "pane::SplitAndMoveLeft",
       "space b l": "pane::SplitAndMoveRight",
@@ -109,12 +116,25 @@
       "space d p": "debugger::Pause",
       "space d r": "debugger::Restart",
       "space d R": "debugger::Rerun",
+      "space d C": "debugger::Continue",
+      "space d D": "debugger::Start",
       "space d S": "debugger::Stop",
+      "space d j": "debugger::ToggleThreadPicker",
+      "space d v": "debug_panel::ToggleFocus",
+      "space d w": "debug_panel::ToggleFocus",
+      "space d W": "editor::EditLogBreakpoint",
       "space d t": "debug_panel::ToggleFocus",
       "space d b b": "editor::ToggleBreakpoint",
+      "space d b c": "editor::EditLogBreakpoint",
       "space d b d": "debugger::UnsetBreakpoint",
+      "space d b D": "debugger::UnsetBreakpoint",
       "space d b e": "debugger::ToggleEnableBreakpoint",
+      "space d b E": "debugger::ToggleEnableBreakpoint",
+      "space d b f": "editor::ToggleBreakpoint",
+      "space d b i": "editor::ToggleBreakpoint",
       "space d b l": "editor::EditLogBreakpoint",
+      "space d b s": "debugger::ToggleEnableBreakpoint",
+      "space d b S": "debugger::ToggleEnableBreakpoint",
 
       // ===== +Errors (SPC e) =====
       "space e l": "diagnostics::Deploy",
@@ -122,6 +142,7 @@
       "space e n": "editor::GoToDiagnostic",
       "space e p": "editor::GoToPreviousDiagnostic",
       "space e N": "editor::GoToPreviousDiagnostic",
+      "space e f": "diagnostics::Deploy",
 
       // ===== +File (SPC f) =====
       "space f f": "file_finder::Toggle",
@@ -133,10 +154,19 @@
       "space f o": "workspace::Open",
       "space f t": "pane::RevealInProjectPanel",
       "space f D": "editor::RevealInFileManager",
+      "space f L": "workspace::OpenWithSystem",
+      "space f T": "workspace::NewTerminal",
+      "space f n": "workspace::NewFile",
+      "space f l": "editor::RevealInFileManager",
       "space f e d": "zed::OpenKeymapFile",
       "space f e D": "zed::OpenKeymap",
+      "space f e k": "zed::OpenKeymapFile",
+      "space f e K": "zed::OpenKeymap",
       "space f e s": "zed::OpenSettingsFile",
       "space f e S": "zed::OpenSettings",
+      "space f e w": "zed::OpenSettingsFile",
+      "space f e W": "zed::OpenSettings",
+      "space f e l": "zed::OpenSettings",
       "space f y y": "workspace::CopyPath",
       "space f y Y": "workspace::CopyRelativePath",
       "space f y n": "editor::CopyFileName",
@@ -144,6 +174,11 @@
       "space f y l": "editor::CopyFileLocation",
       "space f y p": "editor::CopyPermalinkToLine",
       "space f y P": "editor::OpenPermalinkToLine",
+      "space f y C": "editor::CopyFileLocation",
+      "space f y D": "workspace::CopyRelativePath",
+      "space f y L": "editor::CopyFileLocation",
+      "space f y c": "editor::CopyFileLocation",
+      "space f y d": "workspace::CopyPath",
 
       // ===== +Git (SPC g) =====
       // Magit-like status via gitu (see tasks.json); native panel stays on g s
@@ -179,6 +214,9 @@
       "space h k": "zed::OpenKeymap",
       "space h K": "zed::OpenKeymapFile",
       "space h d": "zed::OpenSettings",
+      "space h D": "zed::OpenSettings",
+      "space h I": "zed::Extensions",
+      "space h T": "zed::OpenKeymap",
       "space h e": "zed::Extensions",
 
       // ===== +Insert (SPC i) =====
@@ -189,6 +227,17 @@
       // ===== +Jump (SPC j) =====
       "space j i": "outline::Toggle",
       "space j I": "project_symbols::Toggle",
+      // Helix jump labels (closest to Doom avy / VS Code Jumpy). Full avy-goto-char is not in Zed.
+      "space j j": "vim::HelixJumpToWord",
+      "space j l": "pane::DeploySearch",
+      "space j n": "editor::NewlineBelow",
+      "space j v": "outline::Toggle",
+      "space j w": "vim::HelixJumpToWord",
+      // vim f / sneak (type char(s), jump to next match — no labels)
+      "space j f": ["vim::PushFindForward", { "before": false, "multiline": false }],
+      "space j F": ["vim::PushFindBackward", { "after": false, "multiline": false }],
+      "space j s": "vim::PushSneak",
+      "space j S": "vim::PushSneakBackward",
       "space j =": "editor::Format",
       "space j +": "editor::Format",
       "space j c": "editor::GoToPreviousChange",
@@ -211,11 +260,14 @@
       "space p a": "workspace::AddFolderToProject",
       "space p y": "workspace::CopyRelativePath",
       "space p r": "projects::OpenRemote",
+      "space p Y": "workspace::CopyRelativePath",
 
       // ===== +Quit (SPC q) =====
       "space q q": "workspace::CloseWindow",
       "space q f": "workspace::CloseWindow",
       "space q Q": "zed::Quit",
+      "space q r": ["workspace::SendKeystrokes", "cmd-shift-p reload window enter"],
+      "space q R": ["workspace::SendKeystrokes", "cmd-shift-p reload window enter"],
       "space q s": "workspace::SaveAll",
 
       // ===== +Resume (SPC r) =====
@@ -223,16 +275,18 @@
       "space r s": "pane::DeploySearch",
       "space r p": "projects::OpenRecent",
       "space r r": "task::Rerun",
+      "space r .": "task::Rerun",
 
       // ===== +Search/Symbol (SPC s) =====
       "space s p": "pane::DeploySearch",
       "space s P": "pane::DeploySearch",
-      "space s s": "outline::Toggle",
+      "space s s": "buffer_search::Deploy",
       "space s S": "project_symbols::Toggle",
       "space s j": "outline::Toggle",
       "space s J": "project_symbols::Toggle",
       "space s e": "editor::Rename",
       "space s r": "editor::FindAllReferences",
+      "space s R": "editor::FindAllReferences",
       "space s a": "editor::SelectAllMatches",
       "space s f": "buffer_search::Deploy",
       "space s g": "project_symbols::Toggle",
@@ -292,6 +346,14 @@
       "space x d w": "editor::DeleteToNextWordEnd",
       "space x d d": "editor::DeleteLine",
       "space x s": "editor::SortLinesCaseSensitive",
+      "space x .": "editor::ToggleCodeActions",
+      "space x R": "editor::Rewrap",
+      "space x a": "editor::SelectAll",
+      "space x i": "editor::Indent",
+      "space x l s": "editor::SortLinesCaseSensitive",
+      "space x l d": "editor::SortLinesCaseInsensitive",
+      "space x l S": "editor::SortLinesByLength",
+      "space x l D": "editor::SortLinesCaseInsensitive",
 
       // ===== +Zoom/Fold (SPC z) =====
       "space z z": "workspace::ToggleZoom",
@@ -302,6 +364,10 @@
       "space z o": "editor::UnfoldLines",
       "space z O": "editor::UnfoldRecursive",
       "space z C": "editor::FoldRecursive",
+      "space z . a": "editor::ToggleFoldAll",
+      "space z . c": "editor::Fold",
+      "space z . o": "editor::UnfoldLines",
+      "space z . m": "editor::FoldAll",
       "space z +": "zed::IncreaseBufferFontSize",
       "space z -": "zed::DecreaseBufferFontSize",
       "space z 0": "zed::ResetBufferFontSize",
@@ -309,16 +375,26 @@
       // ===== +Diff (SPC D) =====
       "space shift-d d": "git::Diff",
       "space shift-d r": "git::ReviewDiff",
+      "space shift-d c": "git::Commit",
+      "space shift-d m": "git::OpenModifiedFiles",
+      "space shift-d s": "git_panel::ToggleFocus",
+      "space shift-d w": "git::Worktree",
       "space shift-d h": "editor::ToggleSelectedDiffHunks",
       "space shift-d e": "editor::ExpandAllDiffHunks",
 
       // ===== +Frame (SPC F) =====
       "space shift-f f": "zed::ToggleFullScreen",
       "space shift-f n": "workspace::NewWindow",
+      "space shift-f N": "workspace::NewWindow",
+      "space shift-f o": "projects::OpenRecent",
       "space shift-f d": "workspace::CloseWindow",
 
       // ===== +Show / UI (SPC S / SPC T) =====
       "space shift-s p": "project_panel::ToggleFocus",
+      "space shift-s s": "projects::OpenRecent",
+      "space shift-s r": "workspace::ToggleRightDock",
+      "space shift-s n": "diagnostics::Deploy",
+      "space shift-s x": "diagnostics::Deploy",
       "space shift-s g": "git_panel::ToggleFocus",
       "space shift-s t": "terminal_panel::ToggleFocus",
       "space shift-s a": "agent::ToggleFocus",
@@ -330,6 +406,14 @@
       "space shift-t b": "workspace::ToggleBottomDock",
       "space shift-t a": "workspace::ToggleAllDocks",
       "space shift-t z": "workspace::ToggleZoom",
+      "space shift-t c": "search::ToggleCaseSensitive",
+      "space shift-t i": "editor::ToggleInlayHints",
+      "space shift-t m": "workspace::ToggleBottomDock",
+      "space shift-t s": "search::ToggleWholeWord",
+      "space shift-t t": "theme::ToggleMode",
+
+      // ===== +Layouts (SPC l) =====
+      "space l d": "workspace::CloseWindow",
 
       // ===== +Agent (SPC a) =====
       "space a a": "agent::ToggleFocus",
