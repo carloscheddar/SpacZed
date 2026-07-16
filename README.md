@@ -11,6 +11,7 @@ Built on ideas from [wangfenjin/zed](https://github.com/wangfenjin/zed), expande
 - **~330 Space-leader chords** across buffers, windows, files, project, git, search, debug, text, tasks, and UI toggles
 - Vim mode + native which-key discovery
 - **Workspace-safe Space chords in non-editor panes** (Terminal/gitu, EmptyPane, Project/Git/Debug/Outline/Markdown preview; not Agent thread input)
+- **Generated keymap** from [`scripts/spacemacs_bindings.json`](scripts/spacemacs_bindings.json) (Zed cannot share one binding table across contexts)
 - **Magit via [gitu](https://github.com/altsem/gitu)** — `SPC g g` opens a Magit-inspired TUI in the center pane
 - Magit-inspired bindings in Zed’s native Git panel (`SPC g s`) as a lightweight fallback
 - VSpaceCode-style aliases where Zed has a matching action (file copy variants, debug, tasks, layouts, etc.)
@@ -72,6 +73,23 @@ Use [`settings.json`](settings.json) as a starting point, or merge these keys in
 ```
 
 Do **not** replace a personalized `settings.json` wholesale unless you intend to.
+
+## Editing keybindings
+
+[`keymap.json`](keymap.json) is **generated**. Zed has no built-in way to DRY the same chords across editor + Terminal/panel contexts, so this repo keeps one source and emits both blocks.
+
+1. Edit [`scripts/spacemacs_bindings.json`](scripts/spacemacs_bindings.json):
+   - `workspace` — chords for both editor and non-editor panes
+   - `editor_only` — vim/editor actions only
+   - `non_editor_overrides` / `non_editor_extra` — non-editor differences (e.g. close pane on `SPC q q`)
+2. Edit [`scripts/static_contexts.json`](scripts/static_contexts.json) for panel/Magit/`alt-z`/helix extras.
+3. Regenerate:
+
+```bash
+python3 scripts/generate_keymap.py
+# optional: python3 scripts/generate_keymap.py --check
+cp keymap.json ~/.config/zed/keymap.json
+```
 
 ## Quick reference
 
@@ -220,7 +238,7 @@ Lightweight Magit-ish chords when the built-in panel is focused:
 A complete `space f` binding is winning (often Zed’s default). This repo nulls `space f` in the editor context and under `!Editor && !Terminal`. Keep those nulls if you fork the keymap.
 
 **which-key only shows `e` under `SPC f`**  
-Avoid `!menu` on the main Spacemacs context. This repo uses `Editor && VimControl && !VimWaiting`.
+Avoid `!menu` on the main Spacemacs context. This repo uses `Editor && VimControl && !VimWaiting && (vim_mode == normal || vim_mode == visual)`.
 
 **Keymap errors like “requires input data via [name, input]”**  
 Some vim actions (e.g. `vim::PushFindForward`) need an input object. See `SPC j f` in [`keymap.json`](keymap.json) for the correct form.
@@ -236,10 +254,12 @@ Install gitu (`brew install gitu`) and ensure it is on Zed’s `PATH`. Copy [`ta
 
 ## Syncing from a live config
 
-If you maintain bindings in `~/.config/zed/` and want to refresh this repo:
+Prefer editing [`scripts/spacemacs_bindings.json`](scripts/spacemacs_bindings.json) and regenerating. If you copied a live keymap for a quick test:
 
 ```bash
-cp ~/.config/zed/keymap.json ./keymap.json
+# Do not commit a hand-edited keymap.json without updating the sources.
+python3 scripts/generate_keymap.py
+cp keymap.json ~/.config/zed/keymap.json
 cp ~/.config/zed/tasks.json ./tasks.json
 cp ~/.config/gitu/config.toml ./gitu-config.toml   # if you customize gitu
 # Re-check settings.json stays minimal (no personal agent/theme keys)

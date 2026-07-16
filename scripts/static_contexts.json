@@ -1,0 +1,125 @@
+[
+  {
+    "context": "Editor",
+    "bindings": {
+      "alt-z": "editor::ToggleSoftWrap"
+    }
+  },
+  {
+    "context": "!Editor && !Terminal",
+    "bindings": {
+      "space f": null,
+      "space b": null,
+      "space s": null,
+      "space d": null,
+      "space r": null,
+      "space a": null,
+      "space c": null,
+      "space p": null,
+      "space y": null,
+      "space h": null,
+      "space k": null
+    }
+  },
+  {
+    "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
+    "bindings": {
+      "space f": null,
+      "space b": null,
+      "space s": null,
+      "space d": null,
+      "space r": null,
+      "space a": null,
+      "space c": null,
+      "space p": null,
+      "space y": null,
+      "space h": null,
+      "space k": null
+    }
+  },
+  {
+    "context": "ProjectSearchBar > Editor",
+    "bindings": {
+      "escape": "pane::CloseActiveItem"
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "ctrl-g": "workspace::ToggleBottomDock",
+      "ctrl-shift-space": "command_palette::Toggle"
+    }
+  },
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "q": "workspace::ToggleLeftDock",
+      "space p t": "workspace::ToggleLeftDock",
+      "o": "project_panel::Open",
+      "a": "project_panel::NewFile",
+      "A": "project_panel::NewDirectory",
+      "r": "project_panel::Rename",
+      "d": "project_panel::Delete",
+      "x": "project_panel::Cut",
+      "y": "project_panel::Copy",
+      "p": "project_panel::Paste",
+      "c": "project_panel::CollapseAllEntries"
+    }
+  },
+  {
+    "context": "GitPanel",
+    "bindings": {
+      "tab": "git::Diff",
+      "c c": "git::Commit",
+      "c a": "git::Amend",
+      "b b": "branches::OpenRecent",
+      "P u": "git::Push",
+      "P f": "git::ForcePush",
+      "F u": "git::Pull",
+      "F r": "git::PullRebase",
+      "f f": "git::Fetch",
+      "s": "git::ToggleStaged",
+      "S": "git::StageAll",
+      "u": "git::UnstageFile",
+      "U": "git::UnstageAll",
+      "x": [
+        "git::RestoreFile",
+        {
+          "skip_prompt": false
+        }
+      ],
+      "X": [
+        "git::RestoreFile",
+        {
+          "skip_prompt": true
+        }
+      ],
+      "escape": "workspace::ToggleRightDock",
+      "q": "workspace::ToggleRightDock"
+    }
+  },
+  {
+    "context": "GitDiff > multibuffer || Editor && multibuffer",
+    "bindings": {
+      "escape": "pane::CloseActiveItem",
+      "c c": "git::Commit",
+      "s": "git::ToggleStaged",
+      "S": "git::StageAll",
+      "n": "search::SelectNextMatch",
+      "shift-n": "search::SelectPreviousMatch"
+    }
+  },
+  {
+    "context": "AgentPanel",
+    "bindings": {
+      "escape": "workspace::ToggleRightDock",
+      "ctrl-g": "workspace::ToggleRightDock"
+    }
+  },
+  {
+    "use_key_equivalents": true,
+    "bindings": {
+      "cmd-shift-c": null
+    }
+  }
+]
