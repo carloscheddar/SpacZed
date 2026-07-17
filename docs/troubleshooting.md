@@ -7,6 +7,9 @@
 **`SPC g g` fails / “gitu: command not found”**  
 Install [gitu](https://github.com/altsem/gitu) (`brew install gitu` on macOS) and ensure it is on Zed’s `PATH`. Copy [`tasks.json`](../tasks.json) to `~/.config/zed/tasks.json`. See [Installation](installation.md).
 
+**Opening a file from gitu freezes on `zed --wait …`**  
+Show/open must not use `--wait`. SpacZed’s [`tasks.json`](../tasks.json) sets `VISUAL`/`EDITOR`/`GITU_SHOW_EDITOR` to `zed` and only `GIT_EDITOR` to `zed --wait`. Re-copy `tasks.json` and restart the gitu task if an older env still has `--wait` on `VISUAL`.
+
 **Leader chords do nothing**  
 Confirm [settings](installation.md#minimal-settings): `vim_mode` is on, `which_key` is enabled, and [`keymap.json`](../keymap.json) is installed. You must be in vim **normal** or **visual** mode — Space inserts text in insert mode (including the Agent thread). Press Escape, then `SPC …`.
 

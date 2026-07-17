@@ -12,6 +12,8 @@ Install Magit-friendly overrides from [`gitu-config.toml`](../gitu-config.toml) 
 
 Start gitu with `SPC g g` from an editor, or `alt-space g g` from a terminal. While the terminal is focused, plain Space types normally; use **`alt-space`** for SpacZed chords (temporary until a better terminal leader lands). Quit gitu with `q`. See [Keybindings — Workspace-safe panes](keybindings.md#workspace-safe-panes).
 
+**Editors:** the gitu task sets `VISUAL` / `EDITOR` / `GITU_SHOW_EDITOR` to `zed` (open file and return immediately) and `GIT_EDITOR` to `zed --wait` (block for commit messages). That way showing a file from gitu does not freeze the status pane until you close the tab.
+
 ### Magit-like keys inside gitu
 
 | Key | Action |
@@ -30,7 +32,7 @@ Start gitu with `SPC g g` from an editor, or `alt-space g g` from a terminal. Wh
 
 ### Commit messages (`C-c C-c` / `C-c C-k`)
 
-Commit messages use `zed --wait` via `GIT_EDITOR` / `VISUAL` in the task env. In that buffer (and other extensionless files), Magit-style finish/abort:
+Commit messages use `zed --wait` via `GIT_EDITOR` in the task env (file show uses plain `zed`). In that buffer (and other extensionless files), Magit-style finish/abort:
 
 | Key | Action |
 |-----|--------|

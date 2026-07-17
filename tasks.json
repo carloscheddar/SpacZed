@@ -9,9 +9,10 @@
     "reveal_target": "center",
     "hide": "on_success",
     "env": {
-      "VISUAL": "zed --wait",
-      "EDITOR": "zed --wait",
-      "GIT_EDITOR": "zed --wait"
+      "VISUAL": "zed",
+      "EDITOR": "zed",
+      "GIT_EDITOR": "zed --wait",
+      "GITU_SHOW_EDITOR": "zed"
     }
   }
 ]
