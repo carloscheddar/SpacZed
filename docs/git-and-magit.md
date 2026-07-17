@@ -10,7 +10,7 @@ Opens [gitu](https://github.com/altsem/gitu) in the center pane (see [`tasks.jso
 
 Install Magit-friendly overrides from [`gitu-config.toml`](../gitu-config.toml) to `~/.config/gitu/config.toml` (maps discard to Magit `x`; default gitu uses `K` only). Setup: [Installation](installation.md).
 
-Space leader chords also work inside the gitu terminal pane; see [Keybindings — Workspace-safe panes](keybindings.md#workspace-safe-panes).
+Start gitu with `SPC g g` from an editor, or `alt-space g g` from a terminal. While the terminal is focused, plain Space types normally; use **`alt-space`** for SpacZed chords (temporary until a better terminal leader lands). Quit gitu with `q`. See [Keybindings — Workspace-safe panes](keybindings.md#workspace-safe-panes).
 
 ### Magit-like keys inside gitu
 

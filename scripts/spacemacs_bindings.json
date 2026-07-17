@@ -2,7 +2,8 @@
   "meta": {
     "description": "Single source of truth for Spacemacs-style Space leader chords. Run: python3 scripts/generate_keymap.py",
     "editor_context": "Editor && VimControl && !VimWaiting && (vim_mode == normal || vim_mode == visual)",
-    "non_editor_context": "Terminal || EmptyPane || Welcome || (ProjectPanel && not_editing) || GitPanel || DebugPanel || OutlinePanel || MarkdownPreview || Markdown"
+    "non_editor_context": "EmptyPane || Welcome || (ProjectPanel && not_editing) || GitPanel || DebugPanel || OutlinePanel || MarkdownPreview || Markdown",
+    "terminal_leader": "alt-space"
   },
   "workspace": {
     "space w d": "pane::CloseActiveItem",

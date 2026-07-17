@@ -10,6 +10,9 @@ Install [gitu](https://github.com/altsem/gitu) (`brew install gitu` on macOS) an
 **Leader chords do nothing**  
 Confirm [settings](installation.md#minimal-settings): `vim_mode` is on, `which_key` is enabled, and [`keymap.json`](../keymap.json) is installed. You must be in vim **normal** or **visual** mode — Space inserts text in insert mode (including the Agent thread). Press Escape, then `SPC …`.
 
+**Space opens which-key in the terminal**  
+Plain Space is intentionally *not* a leader in Terminal (so shells can type spaces). Use **`alt-space`** for workspace-safe chords there. If which-key still steals Space, reload/reinstall the generated [`keymap.json`](../keymap.json) (older builds bound Space as leader in Terminal).
+
 **Soft wrap / truncate does nothing inside gitu**  
 gitu draws its own UI in the terminal; Zed editor soft-wrap toggles cannot change it ([gitu#277](https://github.com/altsem/gitu/issues/277)). Use `SPC t l` / `alt-z` in editor buffers instead.
 

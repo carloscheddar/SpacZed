@@ -2,12 +2,12 @@
 
 [← README](../README.md)
 
-[`keymap.json`](../keymap.json) is **generated**. Zed has no built-in way to DRY the same chords across editor + Terminal/panel contexts, so this repo keeps one source and emits both blocks.
+[`keymap.json`](../keymap.json) is **generated**. Zed has no built-in way to DRY the same chords across editor + panel + terminal contexts, so this repo keeps one source and emits those blocks (Terminal remaps the leader to `alt-space`).
 
 ## Edit bindings
 
 1. Edit [`scripts/spacemacs_bindings.json`](../scripts/spacemacs_bindings.json):
-   - `workspace` — chords for both editor and non-editor panes
+   - `workspace` — chords for editor, panels, and (via remapped `alt-space`) Terminal
    - `editor_only` — vim/editor actions only
    - `non_editor_overrides` / `non_editor_extra` — non-editor differences (e.g. close pane on `SPC q q`)
 2. Edit [`scripts/static_contexts.json`](../scripts/static_contexts.json) for panel/Magit/`alt-z`/helix extras.

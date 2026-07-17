@@ -36,9 +36,13 @@ HEADER = """\
 // prefixes (otherwise Zed times out ~1s and runs a short binding).
 // Editor Spacemacs leader is normal/visual only — not insert (so Space inserts).
 // AgentPanel is excluded from the non-editor Space set so thread typing works.
-// Non-editor panes (Terminal/gitu, panels, Markdown preview) get workspace-safe
-// chords only (soft wrap / vim motions / folds stay editor-only).
+// Non-editor panes (panels, EmptyPane, Markdown preview) get workspace-safe
+// Space chords. Terminal keeps Space for typing; use alt-space as leader there
+// (same workspace-safe chords) until a better solution lands.
+// Soft wrap / vim motions / folds stay editor-only.
 """
+
+TERMINAL_LEADER_DEFAULT = "alt-space"
 
 
 def load_json(path: Path):
@@ -53,18 +57,31 @@ def action_name(value) -> str:
     return str(value)
 
 
-def prefix_nulls(keys: set[str]) -> dict[str, None]:
-    """Null every strict prefix of a multi-key Space chord."""
-    nulls: dict[str, None] = {"space": None}
+def prefix_nulls(keys: set[str], leader: str = "space") -> dict[str, None]:
+    """Null every strict prefix of a multi-key leader chord."""
+    nulls: dict[str, None] = {leader: None}
     for key in keys:
         parts = key.split()
-        if not parts or parts[0] != "space":
+        if not parts or parts[0] != leader:
             continue
         for n in range(1, len(parts)):
             pref = " ".join(parts[:n])
             if pref not in keys:
                 nulls[pref] = None
     return nulls
+
+
+def remap_leader(bindings: dict, old: str, new: str) -> dict:
+    """Replace the first key of each chord (the leader) with a different key."""
+    out = {}
+    for key, value in bindings.items():
+        parts = key.split()
+        if parts and parts[0] == old:
+            parts[0] = new
+            out[" ".join(parts)] = value
+        else:
+            out[key] = value
+    return out
 
 
 def sort_bindings(bindings: dict) -> dict:
@@ -107,9 +124,27 @@ def build_non_editor_bindings(data: dict) -> dict:
     return sort_bindings(bindings)
 
 
+def terminal_leader(data: dict) -> str:
+    return data.get("meta", {}).get("terminal_leader") or TERMINAL_LEADER_DEFAULT
+
+
+def build_terminal_bindings(data: dict) -> dict:
+    """Workspace-safe chords under alt-space so Terminal Space still types."""
+    leader = terminal_leader(data)
+    space_bindings = build_non_editor_bindings(data)
+    remapped = remap_leader(space_bindings, "space", leader)
+    # Recompute null prefixes for the new leader (remap keeps space-null keys).
+    leaves = {k: v for k, v in remapped.items() if v is not None}
+    bindings = {}
+    bindings.update(prefix_nulls(set(leaves), leader=leader))
+    bindings.update(leaves)
+    return sort_bindings(bindings)
+
+
 def build_keymap(data: dict, static: list) -> list:
     editor_ctx = data["meta"]["editor_context"]
     non_editor_ctx = data["meta"]["non_editor_context"]
+    terminal_bindings = build_terminal_bindings(data)
 
     editor_block = {
         "context": editor_ctx,
@@ -121,6 +156,7 @@ def build_keymap(data: dict, static: list) -> list:
     }
 
     # Insert generated non-editor block before the Terminal extras / panels.
+    # Merge alt-space leader chords into the Terminal static block.
     out = [editor_block]
     inserted = False
     for block in static:
@@ -132,6 +168,10 @@ def build_keymap(data: dict, static: list) -> list:
         ):
             out.append(non_editor_block)
             inserted = True
+        if ctx == "Terminal":
+            merged = dict(terminal_bindings)
+            merged.update(block.get("bindings") or {})
+            block = {**block, "bindings": sort_bindings(merged)}
         out.append(block)
     if not inserted:
         out.append(non_editor_block)
@@ -215,9 +255,13 @@ def main() -> int:
     ne_ctx = data["meta"]["non_editor_context"]
     ne = next(b for b in keymap if b.get("context") == ne_ctx)
     n_ne = sum(1 for k, v in ne["bindings"].items() if k.startswith("space") and v)
+    term = next(b for b in keymap if b.get("context") == "Terminal")
+    leader = terminal_leader(data)
+    n_term = sum(1 for k, v in term["bindings"].items() if k.startswith(leader) and v)
     print(f"Wrote {args.output}")
     print(f"  editor Space leaves: {n_ed}")
     print(f"  non-editor Space leaves: {n_ne}")
+    print(f"  terminal {leader} leaves: {n_term}")
     return 0
 
 

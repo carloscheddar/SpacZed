@@ -11,8 +11,10 @@
 // prefixes (otherwise Zed times out ~1s and runs a short binding).
 // Editor Spacemacs leader is normal/visual only — not insert (so Space inserts).
 // AgentPanel is excluded from the non-editor Space set so thread typing works.
-// Non-editor panes (Terminal/gitu, panels, Markdown preview) get workspace-safe
-// chords only (soft wrap / vim motions / folds stay editor-only).
+// Non-editor panes (panels, EmptyPane, Markdown preview) get workspace-safe
+// Space chords. Terminal keeps Space for typing; use alt-space as leader there
+// (same workspace-safe chords) until a better solution lands.
+// Soft wrap / vim motions / folds stay editor-only.
 
 [
   {
@@ -547,7 +549,7 @@
     }
   },
   {
-    "context": "Terminal || EmptyPane || Welcome || (ProjectPanel && not_editing) || GitPanel || DebugPanel || OutlinePanel || MarkdownPreview || Markdown",
+    "context": "EmptyPane || Welcome || (ProjectPanel && not_editing) || GitPanel || DebugPanel || OutlinePanel || MarkdownPreview || Markdown",
     "bindings": {
       "space": null,
       "space :": null,
@@ -887,8 +889,341 @@
   {
     "context": "Terminal",
     "bindings": {
+      "alt-space": null,
+      "alt-space :": null,
+      "alt-space a": null,
+      "alt-space b": null,
+      "alt-space c": null,
+      "alt-space d": null,
+      "alt-space e": null,
+      "alt-space f": null,
+      "alt-space g": null,
+      "alt-space h": null,
+      "alt-space i": null,
+      "alt-space j": null,
+      "alt-space l": null,
+      "alt-space p": null,
+      "alt-space q": null,
+      "alt-space r": null,
+      "alt-space s": null,
+      "alt-space shift-d": null,
+      "alt-space shift-f": null,
+      "alt-space shift-s": null,
+      "alt-space shift-t": null,
+      "alt-space t": null,
+      "alt-space w": null,
+      "alt-space z": null,
+      "alt-space b N": null,
+      "alt-space d b": null,
+      "alt-space f e": null,
+      "alt-space f y": null,
+      "alt-space g f": null,
       "ctrl-g": "workspace::ToggleBottomDock",
-      "ctrl-shift-space": "command_palette::Toggle"
+      "ctrl-shift-space": "command_palette::Toggle",
+      "alt-space !": "terminal_panel::ToggleFocus",
+      "alt-space '": "terminal_panel::ToggleFocus",
+      "alt-space /": "pane::DeploySearch",
+      "alt-space 0": "project_panel::ToggleFocus",
+      "alt-space 1": [
+        "workspace::ActivatePane",
+        0
+      ],
+      "alt-space 2": [
+        "workspace::ActivatePane",
+        1
+      ],
+      "alt-space 3": [
+        "workspace::ActivatePane",
+        2
+      ],
+      "alt-space 4": [
+        "workspace::ActivatePane",
+        3
+      ],
+      "alt-space 5": [
+        "workspace::ActivatePane",
+        4
+      ],
+      "alt-space 6": [
+        "workspace::ActivatePane",
+        5
+      ],
+      "alt-space 7": [
+        "workspace::ActivatePane",
+        6
+      ],
+      "alt-space 8": [
+        "workspace::ActivatePane",
+        7
+      ],
+      "alt-space 9": [
+        "workspace::ActivatePane",
+        8
+      ],
+      "alt-space ?": "zed::OpenKeymap",
+      "alt-space space": "command_palette::Toggle",
+      "alt-space tab": "pane::AlternateFile",
+      "alt-space : .": "task::Rerun",
+      "alt-space : :": "task::Spawn",
+      "alt-space : R": [
+        "task::Rerun",
+        {
+          "reevaluate_context": true
+        }
+      ],
+      "alt-space : r": "task::Rerun",
+      "alt-space : s": "task::Spawn",
+      "alt-space a a": "agent::ToggleFocus",
+      "alt-space a d": "agent::OpenAgentDiff",
+      "alt-space a i": "agent::ToggleFocus",
+      "alt-space a n": "agent::NewThread",
+      "alt-space a s": "agent::OpenSettings",
+      "alt-space b 0": "pane::ActivateLastItem",
+      "alt-space b 1": [
+        "pane::ActivateItem",
+        0
+      ],
+      "alt-space b 2": [
+        "pane::ActivateItem",
+        1
+      ],
+      "alt-space b 3": [
+        "pane::ActivateItem",
+        2
+      ],
+      "alt-space b 4": [
+        "pane::ActivateItem",
+        3
+      ],
+      "alt-space b 5": [
+        "pane::ActivateItem",
+        4
+      ],
+      "alt-space b 6": [
+        "pane::ActivateItem",
+        5
+      ],
+      "alt-space b 7": [
+        "pane::ActivateItem",
+        6
+      ],
+      "alt-space b 8": [
+        "pane::ActivateItem",
+        7
+      ],
+      "alt-space b 9": [
+        "pane::ActivateItem",
+        8
+      ],
+      "alt-space b B": "tab_switcher::Toggle",
+      "alt-space b H": "pane::SplitAndMoveLeft",
+      "alt-space b J": "pane::SplitAndMoveDown",
+      "alt-space b K": "pane::SplitAndMoveUp",
+      "alt-space b L": "pane::SplitAndMoveRight",
+      "alt-space b M": "pane::CloseOtherItems",
+      "alt-space b R": "git::RestoreFile",
+      "alt-space b T": "pane::TogglePinTab",
+      "alt-space b b": "tab_switcher::ToggleAll",
+      "alt-space b d": "pane::CloseActiveItem",
+      "alt-space b h": "pane::SplitAndMoveLeft",
+      "alt-space b j": "pane::SplitAndMoveDown",
+      "alt-space b k": "pane::SplitAndMoveUp",
+      "alt-space b l": "pane::SplitAndMoveRight",
+      "alt-space b n": "pane::ActivateNextItem",
+      "alt-space b p": "pane::ActivatePreviousItem",
+      "alt-space b s": "workspace::NewFile",
+      "alt-space b t": "pane::TogglePinTab",
+      "alt-space b u": "pane::ReopenClosedItem",
+      "alt-space c c": "task::Spawn",
+      "alt-space d C": "debugger::Continue",
+      "alt-space d D": "debugger::Start",
+      "alt-space d R": "debugger::Rerun",
+      "alt-space d S": "debugger::Stop",
+      "alt-space d c": "debugger::Continue",
+      "alt-space d d": "debugger::Start",
+      "alt-space d i": "debugger::StepInto",
+      "alt-space d j": "debugger::ToggleThreadPicker",
+      "alt-space d o": "debugger::StepOut",
+      "alt-space d p": "debugger::Pause",
+      "alt-space d r": "debugger::Restart",
+      "alt-space d s": "debugger::StepOver",
+      "alt-space d t": "debug_panel::ToggleFocus",
+      "alt-space d v": "debug_panel::ToggleFocus",
+      "alt-space d w": "debug_panel::ToggleFocus",
+      "alt-space e e": "diagnostics::Deploy",
+      "alt-space e f": "diagnostics::Deploy",
+      "alt-space e l": "diagnostics::Deploy",
+      "alt-space f L": "workspace::OpenWithSystem",
+      "alt-space f S": "workspace::SaveWithoutFormat",
+      "alt-space f T": "workspace::NewTerminal",
+      "alt-space f a": "workspace::SaveAll",
+      "alt-space f f": "file_finder::Toggle",
+      "alt-space f n": "workspace::NewFile",
+      "alt-space f o": "workspace::Open",
+      "alt-space f r": "pane::ReopenClosedItem",
+      "alt-space f s": "workspace::Save",
+      "alt-space f t": "pane::RevealInProjectPanel",
+      "alt-space f w": "workspace::SaveAs",
+      "alt-space g B": "branches::OpenRecent",
+      "alt-space g D": "git::ReviewDiff",
+      "alt-space g F": "git::Pull",
+      "alt-space g P": "git::Push",
+      "alt-space g S": "git::StageFile",
+      "alt-space g U": "git::UnstageFile",
+      "alt-space g b": "git::Blame",
+      "alt-space g c": "git::Clone",
+      "alt-space g d": "git::Diff",
+      "alt-space g g": [
+        "task::Spawn",
+        {
+          "task_name": "gitu",
+          "reveal_target": "center"
+        }
+      ],
+      "alt-space g i": "git::Init",
+      "alt-space g m": "git::OpenModifiedFiles",
+      "alt-space g r": "git::RestoreFile",
+      "alt-space g s": "git_panel::ToggleFocus",
+      "alt-space g w": "git::Worktree",
+      "alt-space h D": "zed::OpenSettings",
+      "alt-space h I": "zed::Extensions",
+      "alt-space h K": "zed::OpenKeymapFile",
+      "alt-space h T": "zed::OpenKeymap",
+      "alt-space h d": "zed::OpenSettings",
+      "alt-space h e": "zed::Extensions",
+      "alt-space h k": "zed::OpenKeymap",
+      "alt-space i s": "assistant::InlineAssist",
+      "alt-space j l": "pane::DeploySearch",
+      "alt-space l d": "workspace::CloseWindow",
+      "alt-space p /": "pane::DeploySearch",
+      "alt-space p R": "pane::DeploySearch",
+      "alt-space p T": "project_panel::ToggleFocus",
+      "alt-space p Y": "workspace::CopyRelativePath",
+      "alt-space p a": "workspace::AddFolderToProject",
+      "alt-space p c": "task::Spawn",
+      "alt-space p f": "file_finder::Toggle",
+      "alt-space p l": "projects::OpenRecent",
+      "alt-space p p": "projects::OpenRecent",
+      "alt-space p r": "projects::OpenRemote",
+      "alt-space p t": "project_panel::ToggleFocus",
+      "alt-space p y": "workspace::CopyRelativePath",
+      "alt-space q Q": "zed::Quit",
+      "alt-space q R": [
+        "workspace::SendKeystrokes",
+        "cmd-shift-p reload window enter"
+      ],
+      "alt-space q f": "pane::CloseActiveItem",
+      "alt-space q q": "pane::CloseActiveItem",
+      "alt-space q r": [
+        "workspace::SendKeystrokes",
+        "cmd-shift-p reload window enter"
+      ],
+      "alt-space q s": "workspace::SaveAll",
+      "alt-space r .": "task::Rerun",
+      "alt-space r b": "tab_switcher::ToggleAll",
+      "alt-space r p": "projects::OpenRecent",
+      "alt-space r r": "task::Rerun",
+      "alt-space r s": "pane::DeploySearch",
+      "alt-space s P": "pane::DeploySearch",
+      "alt-space s p": "pane::DeploySearch",
+      "alt-space shift-d c": "git::Commit",
+      "alt-space shift-d d": "git::Diff",
+      "alt-space shift-d m": "git::OpenModifiedFiles",
+      "alt-space shift-d r": "git::ReviewDiff",
+      "alt-space shift-d s": "git_panel::ToggleFocus",
+      "alt-space shift-d w": "git::Worktree",
+      "alt-space shift-f N": "workspace::NewWindow",
+      "alt-space shift-f d": "workspace::CloseWindow",
+      "alt-space shift-f f": "zed::ToggleFullScreen",
+      "alt-space shift-f n": "workspace::NewWindow",
+      "alt-space shift-f o": "projects::OpenRecent",
+      "alt-space shift-s a": "agent::ToggleFocus",
+      "alt-space shift-s d": "debug_panel::ToggleFocus",
+      "alt-space shift-s e": "diagnostics::Deploy",
+      "alt-space shift-s g": "git_panel::ToggleFocus",
+      "alt-space shift-s n": "diagnostics::Deploy",
+      "alt-space shift-s o": "outline_panel::ToggleFocus",
+      "alt-space shift-s p": "project_panel::ToggleFocus",
+      "alt-space shift-s r": "workspace::ToggleRightDock",
+      "alt-space shift-s s": "projects::OpenRecent",
+      "alt-space shift-s t": "terminal_panel::ToggleFocus",
+      "alt-space shift-s x": "diagnostics::Deploy",
+      "alt-space shift-t a": "workspace::ToggleAllDocks",
+      "alt-space shift-t b": "workspace::ToggleBottomDock",
+      "alt-space shift-t l": "workspace::ToggleLeftDock",
+      "alt-space shift-t m": "workspace::ToggleBottomDock",
+      "alt-space shift-t r": "workspace::ToggleRightDock",
+      "alt-space shift-t t": "theme::ToggleMode",
+      "alt-space shift-t z": "workspace::ToggleZoom",
+      "alt-space t t": "theme::ToggleMode",
+      "alt-space t z": "workspace::ToggleZoom",
+      "alt-space w -": "pane::SplitDown",
+      "alt-space w /": "pane::SplitRight",
+      "alt-space w 1": [
+        "workspace::ActivatePane",
+        0
+      ],
+      "alt-space w 2": [
+        "workspace::ActivatePane",
+        1
+      ],
+      "alt-space w 3": [
+        "workspace::ActivatePane",
+        2
+      ],
+      "alt-space w 4": [
+        "workspace::ActivatePane",
+        3
+      ],
+      "alt-space w D": "workspace::CloseInactiveTabsAndPanes",
+      "alt-space w F": "workspace::NewWindow",
+      "alt-space w H": "workspace::MovePaneLeft",
+      "alt-space w J": "workspace::MovePaneDown",
+      "alt-space w K": "workspace::MovePaneUp",
+      "alt-space w L": "workspace::MovePaneRight",
+      "alt-space w M": "workspace::ToggleZoom",
+      "alt-space w W": "workspace::ActivatePreviousPane",
+      "alt-space w d": "pane::CloseActiveItem",
+      "alt-space w h": "workspace::ActivatePaneLeft",
+      "alt-space w j": "workspace::ActivatePaneDown",
+      "alt-space w k": "workspace::ActivatePaneUp",
+      "alt-space w l": "workspace::ActivatePaneRight",
+      "alt-space w m": "workspace::CloseAllDocks",
+      "alt-space w o": "workspace::NewWindow",
+      "alt-space w q": "pane::CloseActiveItem",
+      "alt-space w s": "pane::SplitDown",
+      "alt-space w v": "pane::SplitRight",
+      "alt-space w w": "workspace::ActivateNextPane",
+      "alt-space w x": "workspace::CloseAllItemsAndPanes",
+      "alt-space w z": "pane::JoinAll",
+      "alt-space z +": "zed::IncreaseBufferFontSize",
+      "alt-space z -": "zed::DecreaseBufferFontSize",
+      "alt-space z 0": "zed::ResetBufferFontSize",
+      "alt-space z z": "workspace::ToggleZoom",
+      "alt-space b N h": "workspace::NewFileSplitHorizontal",
+      "alt-space b N n": "workspace::NewFile",
+      "alt-space d b D": "debugger::UnsetBreakpoint",
+      "alt-space d b E": "debugger::ToggleEnableBreakpoint",
+      "alt-space d b S": "debugger::ToggleEnableBreakpoint",
+      "alt-space d b d": "debugger::UnsetBreakpoint",
+      "alt-space d b e": "debugger::ToggleEnableBreakpoint",
+      "alt-space d b s": "debugger::ToggleEnableBreakpoint",
+      "alt-space f e D": "zed::OpenKeymap",
+      "alt-space f e K": "zed::OpenKeymap",
+      "alt-space f e S": "zed::OpenSettings",
+      "alt-space f e W": "zed::OpenSettings",
+      "alt-space f e d": "zed::OpenKeymapFile",
+      "alt-space f e k": "zed::OpenKeymapFile",
+      "alt-space f e l": "zed::OpenSettings",
+      "alt-space f e s": "zed::OpenSettingsFile",
+      "alt-space f e w": "zed::OpenSettingsFile",
+      "alt-space f y D": "workspace::CopyRelativePath",
+      "alt-space f y Y": "workspace::CopyRelativePath",
+      "alt-space f y d": "workspace::CopyPath",
+      "alt-space f y y": "workspace::CopyPath",
+      "alt-space g f d": "git::Diff",
+      "alt-space g f f": "git::Fetch",
+      "alt-space g f l": "git::FileHistory"
     }
   },
   {
