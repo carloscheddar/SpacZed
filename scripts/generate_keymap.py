@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Generate keymap.json from scripts/spacemacs_bindings.json + static_contexts.json.
+"""Generate keymap.json for SpacZed (pronounced "spaced").
 
-Zed has no way to share one binding table across multiple contexts, so we keep a
-single source of truth and emit the duplicated editor / non-editor blocks.
+Reads scripts/spacemacs_bindings.json + static_contexts.json. Zed has no way to
+share one binding table across multiple contexts, so we keep a single source of
+truth and emit the duplicated editor / non-editor blocks.
 
 Usage (from repo root):
   python3 scripts/generate_keymap.py
@@ -22,9 +23,9 @@ STATIC_PATH = Path(__file__).resolve().parent / "static_contexts.json"
 OUT_PATH = ROOT / "keymap.json"
 
 HEADER = """\
-// Spacemacs / VSpaceCode-style keymap for Zed
+// SpacZed (pronounced "spaced") — Spacemacs / VSpaceCode-style keymap for Zed
 //
-// Inspired by https://github.com/wangfenjin/zed and VSpaceCode menus.
+// Inspired by Spacemacs, Doom Emacs, and VSpaceCode menus.
 // Space is the leader in vim normal/visual; enable which_key in settings.json.
 //
 // GENERATED FILE — do not edit by hand.

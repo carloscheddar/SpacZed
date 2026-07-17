@@ -1,6 +1,6 @@
-// Spacemacs / VSpaceCode-style keymap for Zed
+// SpacZed (pronounced "spaced") — Spacemacs / VSpaceCode-style keymap for Zed
 //
-// Inspired by https://github.com/wangfenjin/zed and VSpaceCode menus.
+// Inspired by Spacemacs, Doom Emacs, and VSpaceCode menus.
 // Space is the leader in vim normal/visual; enable which_key in settings.json.
 //
 // GENERATED FILE — do not edit by hand.
