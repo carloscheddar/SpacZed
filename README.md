@@ -206,7 +206,14 @@ Magit-like keys inside gitu:
 | `h` | Help |
 | `q` | Quit (closes the Zed task pane) |
 
-Commit messages use `zed --wait` via `GIT_EDITOR` / `VISUAL` in the task env.
+Commit messages use `zed --wait` via `GIT_EDITOR` / `VISUAL` in the task env. In that buffer (and other extensionless files), Magit-style finish/abort:
+
+| Key | Action |
+|-----|--------|
+| `C-c C-c` | Save and close (finish commit; no unsaved prompt) |
+| `C-c C-k` | Close without saving (abort) |
+
+Zed only exposes file **extension** in key context (not `COMMIT_EDITMSG` by name), so these chords also apply to other extensionless buffers (`Makefile`, `Dockerfile`, …). Prefer `:wq` / `:q!` if you need vim-native finish on those.
 
 ### Native Git panel (`SPC g s`)
 
@@ -222,6 +229,8 @@ Lightweight Magit-ish chords when the built-in panel is focused:
 | `P u` / `F u` | Push / pull |
 | `f f` | Fetch |
 | `q` / `esc` | Close panel |
+
+In the commit message box (panel or expanded editor): `C-c C-c` commits, `C-c C-k` cancels (Magit `with-editor`).
 
 ## Known gaps vs Spacemacs / Doom / VSpaceCode
 

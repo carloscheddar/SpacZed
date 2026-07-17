@@ -110,6 +110,40 @@
     }
   },
   {
+    "context": "CommitEditor > Editor",
+    "bindings": {
+      "ctrl-c": null,
+      "ctrl-c ctrl-c": "git::Commit",
+      "ctrl-c ctrl-k": "git::Cancel"
+    }
+  },
+  {
+    "context": "GitCommit > Editor && mode == auto_height || Editor && mode == auto_height",
+    "bindings": {
+      "ctrl-c": null,
+      "ctrl-c ctrl-c": "git::Commit",
+      "ctrl-c ctrl-k": "menu::Cancel"
+    }
+  },
+  {
+    "context": "Editor && mode == full && !extension && !CommitEditor",
+    "bindings": {
+      "ctrl-c": null,
+      "ctrl-c ctrl-c": [
+        "pane::CloseActiveItem",
+        {
+          "save_intent": "save"
+        }
+      ],
+      "ctrl-c ctrl-k": [
+        "pane::CloseActiveItem",
+        {
+          "save_intent": "skip"
+        }
+      ]
+    }
+  },
+  {
     "context": "AgentPanel",
     "bindings": {
       "escape": "workspace::ToggleRightDock",
