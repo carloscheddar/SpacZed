@@ -14,7 +14,7 @@ Show/open must not use `--wait`. SpacZed’s [`tasks.json`](../tasks.json) sets 
 Confirm [settings](installation.md#minimal-settings): `vim_mode` is on, `which_key` is enabled, and [`keymap.json`](../keymap.json) is installed. You must be in vim **normal** or **visual** mode — Space inserts text in insert mode (including the Agent thread). Press Escape, then `SPC …`.
 
 **Space opens which-key in the terminal**  
-Plain Space is intentionally *not* a leader in Terminal (so shells can type spaces). Use **`alt-space`** for workspace-safe chords there. If which-key still steals Space, reload/reinstall the generated [`keymap.json`](../keymap.json) (older builds bound Space as leader in Terminal).
+In a normal shell, Space should type; SpacZed chords use **`alt-space`**, or toggle terminal vi-mode then Space. Prefer **`alt-shift-v`** to toggle (`ctrl-shift-space` is often eaten by macOS Input Sources). On alt screen (gitu / other TUIs), Space *is* the leader by design — toggling vi-mode there does not change Space-leader behavior. Verify vi-mode on a **shell** terminal: after toggle, `SPC f f` should open the file finder; toggle off and Space types again. If a plain shell still steals Space with vi-mode off, reload the generated [`keymap.json`](../keymap.json).
 
 **Soft wrap / truncate does nothing inside gitu**  
 gitu draws its own UI in the terminal; Zed editor soft-wrap toggles cannot change it ([gitu#277](https://github.com/altsem/gitu/issues/277)). Use `SPC t l` / `alt-z` in editor buffers instead.

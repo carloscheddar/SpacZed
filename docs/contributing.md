@@ -2,15 +2,15 @@
 
 [← README](../README.md)
 
-[`keymap.json`](../keymap.json) is **generated**. Zed has no built-in way to DRY the same chords across editor + panel + terminal contexts, so this repo keeps one source and emits those blocks (Terminal remaps the leader to `alt-space`).
+[`keymap.json`](../keymap.json) is **generated**. Zed has no built-in way to DRY the same chords across editor + panel + terminal contexts, so this repo keeps one source and emits those blocks. Terminal gets a hybrid: base `alt-space` leader, plus Space leader under `vi_mode` and `screen == alt`.
 
 ## Edit bindings
 
 1. Edit [`scripts/spacemacs_bindings.json`](../scripts/spacemacs_bindings.json):
-   - `workspace` — chords for editor, panels, and (via remapped `alt-space`) Terminal
+   - `workspace` — chords for editor, panels, and Terminal (via `alt-space` and Space-leader contexts)
    - `editor_only` — vim/editor actions only
    - `non_editor_overrides` / `non_editor_extra` — non-editor differences (e.g. close pane on `SPC q q`)
-2. Edit [`scripts/static_contexts.json`](../scripts/static_contexts.json) for panel/Magit/`alt-z`/helix extras.
+2. Edit [`scripts/static_contexts.json`](../scripts/static_contexts.json) for panel/Magit/`alt-z`/helix extras (including Terminal `ctrl-shift-space` → ToggleViMode).
 3. Regenerate:
 
 ```bash

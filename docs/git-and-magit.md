@@ -10,7 +10,7 @@ Opens [gitu](https://github.com/altsem/gitu) in the center pane (see [`tasks.jso
 
 Install Magit-friendly overrides from [`gitu-config.toml`](../gitu-config.toml) to `~/.config/gitu/config.toml` (maps discard to Magit `x`; default gitu uses `K` only). Setup: [Installation](installation.md).
 
-Start gitu with `SPC g g` from an editor, or `alt-space g g` from a terminal. While the terminal is focused, plain Space types normally; use **`alt-space`** for SpacZed chords (temporary until a better terminal leader lands). Quit gitu with `q`. See [Keybindings — Workspace-safe panes](keybindings.md#workspace-safe-panes).
+Start gitu with `SPC g g` from an editor (or `alt-space g g` / `SPC g g` from a terminal, depending on mode). Inside gitu’s full-screen UI (alt screen), **Space** is the SpacZed leader — same workspace-safe chords as panels. In a normal shell terminal, Space types; use **`alt-space`**, or toggle terminal vi-mode (`alt-shift-v`, or `ctrl-shift-space` if macOS Input Sources is not capturing it) then Space. Quit gitu with `q`. See [Keybindings — Workspace-safe panes](keybindings.md#workspace-safe-panes).
 
 **Editors:** the gitu task sets `VISUAL` / `EDITOR` / `GITU_SHOW_EDITOR` to `zed` (open file and return immediately) and `GIT_EDITOR` to `zed --wait` (block for commit messages). That way showing a file from gitu does not freeze the status pane until you close the tab.
 

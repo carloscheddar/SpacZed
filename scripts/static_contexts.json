@@ -55,7 +55,8 @@
     "context": "Terminal",
     "bindings": {
       "ctrl-g": "workspace::ToggleBottomDock",
-      "ctrl-shift-space": "command_palette::Toggle"
+      "ctrl-shift-space": "terminal::ToggleViMode",
+      "alt-shift-v": "terminal::ToggleViMode"
     }
   },
   {

@@ -10,7 +10,7 @@ Bringing the magic of [Spacemacs](https://github.com/syl20bnr/spacemacs), [Doom 
 
 - **~330 Space-leader chords** across buffers, windows, files, project, git, search, debug, text, tasks, and UI toggles
 - Vim mode + native which-key discovery
-- **Workspace-safe Space chords** in terminals, empty panes, and project/git/debug/outline/markdown panels
+- **Workspace-safe Space chords** in empty panes and project/git/debug/outline/markdown panels; Terminal uses **Space** on alt screen (gitu) / vi-mode, else **`alt-space`**
 - **Generated keymap** from a single bindings source
 - **Magit via [gitu](https://github.com/altsem/gitu)** — `SPC g g` — plus Magit-inspired chords in Zed’s native Git panel (`SPC g s`)
 - VSpaceCode-style menu coverage where Zed has a matching action

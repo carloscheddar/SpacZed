@@ -98,7 +98,15 @@ Markdown preview: `SPC t m` opens the preview from the editor; the same chord cl
 
 The same Space leader works in EmptyPane/Welcome, Project panel, Git panel, Debug panel, Outline panel, and **Markdown preview** for every **workspace-safe** chord (files/projects/git/windows/tasks/toggles like `SPC t z`, docks, …). Editor-only chords (soft wrap, vim motions, format, folds, …) stay vim-editor-only. In those panes, `SPC q q` / `SPC w d` close the active pane item rather than the whole window.
 
-**Terminal:** plain Space types a literal space (shells / gitu). Use **`alt-space`** as the temporary terminal leader for the same workspace-safe chords (`alt-space g g`, `alt-space q q`, …). A better terminal solution may replace this later. **Agent panel thread input is also excluded** so Space inserts normally while typing.
+**Terminal (hybrid leaders):**
+
+| Situation | Leader |
+|-----------|--------|
+| Shell / normal screen | Space types; use **`alt-space`** for SpacZed chords |
+| Terminal **vi-mode** on (`alt-shift-v` or `ctrl-shift-space`) | **Space** (same workspace-safe chords) |
+| Alt screen (gitu and other full-screen TUIs) | **Space** (Zed has no gitu-specific context; alt screen is the proxy) |
+
+Zed cannot default vi-mode on for new terminals. Prefer **`alt-shift-v`** to toggle (macOS often steals `ctrl-shift-space` for Input Sources — disable that shortcut in System Settings if you want Zed’s default chord). Other alt-screen apps (`vim`, `less`, …) also get Space-as-leader while active. **Agent panel thread input is excluded** so Space inserts normally while typing.
 
 > which-key shows `Spawn` for `task::Spawn` bindings ([zed#46348](https://github.com/zed-industries/zed/issues/46348)); custom labels are not supported yet.
 

@@ -37,12 +37,18 @@ HEADER = """\
 // Editor Spacemacs leader is normal/visual only — not insert (so Space inserts).
 // AgentPanel is excluded from the non-editor Space set so thread typing works.
 // Non-editor panes (panels, EmptyPane, Markdown preview) get workspace-safe
-// Space chords. Terminal keeps Space for typing; use alt-space as leader there
-// (same workspace-safe chords) until a better solution lands.
+// Space chords. Terminal hybrid leaders:
+//   - base Terminal: alt-space (Space types in shells)
+//   - Terminal && vi_mode: Space leader
+//   - Terminal && screen == alt: Space leader (gitu / full-screen TUIs)
 // Soft wrap / vim motions / folds stay editor-only.
 """
 
 TERMINAL_LEADER_DEFAULT = "alt-space"
+TERMINAL_SPACE_CONTEXTS = (
+    "Terminal && vi_mode",
+    "Terminal && screen == alt",
+)
 
 
 def load_json(path: Path):
@@ -128,12 +134,11 @@ def terminal_leader(data: dict) -> str:
     return data.get("meta", {}).get("terminal_leader") or TERMINAL_LEADER_DEFAULT
 
 
-def build_terminal_bindings(data: dict) -> dict:
-    """Workspace-safe chords under alt-space so Terminal Space still types."""
+def build_terminal_alt_leader_bindings(data: dict) -> dict:
+    """Workspace-safe chords under alt-space so shell Space still types."""
     leader = terminal_leader(data)
     space_bindings = build_non_editor_bindings(data)
     remapped = remap_leader(space_bindings, "space", leader)
-    # Recompute null prefixes for the new leader (remap keeps space-null keys).
     leaves = {k: v for k, v in remapped.items() if v is not None}
     bindings = {}
     bindings.update(prefix_nulls(set(leaves), leader=leader))
@@ -141,10 +146,16 @@ def build_terminal_bindings(data: dict) -> dict:
     return sort_bindings(bindings)
 
 
+def build_terminal_space_leader_bindings(data: dict) -> dict:
+    """Same workspace-safe chords under Space (vi_mode or alt-screen)."""
+    return build_non_editor_bindings(data)
+
+
 def build_keymap(data: dict, static: list) -> list:
     editor_ctx = data["meta"]["editor_context"]
     non_editor_ctx = data["meta"]["non_editor_context"]
-    terminal_bindings = build_terminal_bindings(data)
+    terminal_alt = build_terminal_alt_leader_bindings(data)
+    terminal_space = build_terminal_space_leader_bindings(data)
 
     editor_block = {
         "context": editor_ctx,
@@ -156,7 +167,7 @@ def build_keymap(data: dict, static: list) -> list:
     }
 
     # Insert generated non-editor block before the Terminal extras / panels.
-    # Merge alt-space leader chords into the Terminal static block.
+    # Merge alt-space into base Terminal; emit Space-leader Terminal variants after.
     out = [editor_block]
     inserted = False
     for block in static:
@@ -169,9 +180,13 @@ def build_keymap(data: dict, static: list) -> list:
             out.append(non_editor_block)
             inserted = True
         if ctx == "Terminal":
-            merged = dict(terminal_bindings)
+            merged = dict(terminal_alt)
             merged.update(block.get("bindings") or {})
             block = {**block, "bindings": sort_bindings(merged)}
+            out.append(block)
+            for space_ctx in TERMINAL_SPACE_CONTEXTS:
+                out.append({"context": space_ctx, "bindings": dict(terminal_space)})
+            continue
         out.append(block)
     if not inserted:
         out.append(non_editor_block)
@@ -258,10 +273,18 @@ def main() -> int:
     term = next(b for b in keymap if b.get("context") == "Terminal")
     leader = terminal_leader(data)
     n_term = sum(1 for k, v in term["bindings"].items() if k.startswith(leader) and v)
+    n_term_space = sum(
+        1
+        for b in keymap
+        if b.get("context") in TERMINAL_SPACE_CONTEXTS
+        for k, v in b["bindings"].items()
+        if k.startswith("space") and v
+    ) // max(len(TERMINAL_SPACE_CONTEXTS), 1)
     print(f"Wrote {args.output}")
     print(f"  editor Space leaves: {n_ed}")
     print(f"  non-editor Space leaves: {n_ne}")
     print(f"  terminal {leader} leaves: {n_term}")
+    print(f"  terminal Space-leader contexts: {len(TERMINAL_SPACE_CONTEXTS)} x ~{n_term_space} leaves")
     return 0
 
 
