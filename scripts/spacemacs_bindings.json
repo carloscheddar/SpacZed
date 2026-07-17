@@ -405,6 +405,7 @@
     "space t r": "search::ToggleRegex",
     "space t e": "editor::ToggleEditPrediction",
     "space t b": "editor::ToggleBreakpoint",
+    "space t m": "markdown::OpenPreview",
     "space w =": "vim::ResetPaneSizes",
     "space w [": "vim::ResizePaneLeft",
     "space w ]": "vim::ResizePaneRight",

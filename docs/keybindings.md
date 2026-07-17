@@ -35,6 +35,7 @@
 | `SPC j i` | Outline (symbols) |
 | `SPC l d` | Close window / layout |
 | `SPC t l` | Toggle soft wrap (truncate) |
+| `SPC t m` | Toggle markdown preview |
 | `alt-z` / `opt-z` | Toggle soft wrap (VS Code muscle memory) |
 | `SPC a i` | Agent panel |
 | `SPC q q` | Close window |
@@ -88,6 +89,8 @@
 **Text (`SPC x`)** — join/case/sort/indent/rewrap/code actions.
 
 Soft wrap / truncate: `SPC t l` or `alt-z` (`opt-z` on macOS) → `editor::ToggleSoftWrap` (Zed no longer ships this as a default).
+
+Markdown preview: `SPC t m` opens the preview from the editor; the same chord closes the preview pane when it is focused.
 
 **Tasks (`SPC :`)** — spawn picker (`SPC : :` / `SPC : s`), rerun last (`SPC : .` / `SPC : r`), rerun with fresh context (`SPC : R`). Zed has no build/test/configure task types, and which-key cannot show task names for `task::Spawn` yet ([zed#46348](https://github.com/zed-industries/zed/issues/46348)).
 

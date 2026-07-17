@@ -371,6 +371,7 @@
       "space t e": "editor::ToggleEditPrediction",
       "space t i": "editor::ToggleInlayHints",
       "space t l": "editor::ToggleSoftWrap",
+      "space t m": "markdown::OpenPreview",
       "space t n": "editor::ToggleLineNumbers",
       "space t r": "search::ToggleRegex",
       "space t t": "theme::ToggleMode",
@@ -497,6 +498,14 @@
     "context": "Editor",
     "bindings": {
       "alt-z": "editor::ToggleSoftWrap"
+    }
+  },
+  {
+    "context": "MarkdownPreview",
+    "bindings": {
+      "space": null,
+      "space t": null,
+      "space t m": "pane::CloseActiveItem"
     }
   },
   {

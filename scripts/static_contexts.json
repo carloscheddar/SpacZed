@@ -6,6 +6,14 @@
     }
   },
   {
+    "context": "MarkdownPreview",
+    "bindings": {
+      "space": null,
+      "space t": null,
+      "space t m": "pane::CloseActiveItem"
+    }
+  },
+  {
     "context": "!Editor && !Terminal",
     "bindings": {
       "space f": null,

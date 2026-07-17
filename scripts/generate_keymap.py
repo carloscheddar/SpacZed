@@ -212,7 +212,8 @@ def main() -> int:
     # sanity parse
     json.loads(strip_comments(rendered))
     n_ed = sum(1 for k, v in keymap[0]["bindings"].items() if k.startswith("space") and v)
-    ne = next(b for b in keymap if "MarkdownPreview" in b.get("context", ""))
+    ne_ctx = data["meta"]["non_editor_context"]
+    ne = next(b for b in keymap if b.get("context") == ne_ctx)
     n_ne = sum(1 for k, v in ne["bindings"].items() if k.startswith("space") and v)
     print(f"Wrote {args.output}")
     print(f"  editor Space leaves: {n_ed}")
